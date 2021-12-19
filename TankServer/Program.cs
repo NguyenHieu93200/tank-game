@@ -7,7 +7,7 @@ namespace TankServer
         static void Main(string[] args)
         {
             Console.Title = "Tank Server";
-            Server.Start(2, 8000);
+            Server.Start(2, 1, 8000);
             Console.ReadKey();
         }
     }

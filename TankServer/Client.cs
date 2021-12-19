@@ -12,11 +12,15 @@ namespace TankServer
 
         public int id;
         public string username;
+        public int roomId;
+        public int teamId;
+        public int tankId;
         public TCP tcp;
 
         public Client(int _id)
         {
             id = _id;
+            roomId = 0;
             tcp = new TCP(id);
         }
 

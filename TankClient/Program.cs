@@ -15,9 +15,45 @@ namespace TankClient
             string username = Console.ReadLine();
 
             new Client("127.0.0.1", 8000);
+            if (Client.instance == null)
+            {
+                Console.WriteLine("Can't connect to server. Please try again soon.");
+            }
             PacketSender.ConnectSender(username);
 
+            RoomMenu();
             Console.ReadKey();
+        }
+
+        private static void RoomMenu()
+        {
+            Console.WriteLine("What do you want to do?\n1. Create room\n2. Join room\nOther key to exit.");
+            switch (Console.ReadKey(true).Key)
+            {
+                case ConsoleKey.D1:
+                    CreateRoom();
+                    break;
+                case ConsoleKey.D2:
+                    JoinRoom();
+                    break;
+                default:
+                    break;
+            };
+        }
+
+        private static void CreateRoom()
+        {
+            Console.WriteLine("CreateRoom");
+        }
+
+        private static void JoinRoom()
+        {
+            Console.WriteLine("JoinRoom");
+        }
+
+        private static void RoomInfo()
+        {
+
         }
     }
 }

@@ -9,17 +9,21 @@ namespace TankServer
     internal class Server
     {
         public static int MaxPlayers { get; private set; }
+        public static int MaxRooms { get; private set; }   
         public static int Port { get; private set; }
         public static Dictionary<int, Client> clients = new Dictionary<int, Client>();
+        public static Dictionary<int, Room> rooms = new Dictionary<int,Room>();
 
         private static TcpListener tcpListener = null;
 
-        public static void Start(int _maxPlayers, int _port)
+        public static void Start(int _maxPlayers, int _maxRooms, int _port)
         {
             Console.WriteLine("Starting server....");
 
             Port = _port;
             MaxPlayers = _maxPlayers;
+            MaxRooms = _maxRooms;
+            Console.WriteLine($"Set MaxPlayers to {MaxPlayers}.\nSet MaxRooms to {MaxRooms}.");
             InitializeServerData();
 
             tcpListener = new TcpListener(localaddr: IPAddress.Any, port: Port);
@@ -46,6 +50,7 @@ namespace TankServer
             }
 
             Console.WriteLine($"{_client.Client.RemoteEndPoint} failed to connect: Server full!");
+            _client.Close();
         }
 
         private static void InitializeServerData()
@@ -53,6 +58,10 @@ namespace TankServer
             for (int i = 1; i <= MaxPlayers; i++)
             {
                 clients.Add(i, new Client(i));
+            }
+            for (int i = 1;i <= MaxRooms; i++)
+            {
+                rooms.Add(i, null);
             }
         }
     }

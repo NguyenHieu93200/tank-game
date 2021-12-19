@@ -8,11 +8,35 @@ namespace TankClient
     {
         sError,
         sConnect,
+        sRoomInfo,
+        sRoomList,
+        sGameStart,
+        sTankPosition,
+        sTankShoot,
+        sTankSpecial,
+        sTankHealth,
+        sTankDeath,
+        sWinRound,
+        sWinGame,
+        sDisconnect
     }
 
     public enum ClientPackets
     {
-        cConnect = 1
+        cConnect = 1,
+        cCreateRoom,
+        cRoomList,
+        cJoinRoom,
+        cInfoChange,
+        cStartGame,
+        cTankMove,
+        cTankShoot,
+        cTankSpecial,
+        cTankHealth,
+        cTankDeath,
+        cWinRound,
+        cWinGame,
+        cDisconnect
     }
 
     internal class Packet
@@ -33,6 +57,13 @@ namespace TankClient
             pos = 0;
             buffer = new List<byte>();
             buffer.AddRange(_data);
+            data = buffer.ToArray();
+        }
+
+        public Packet(byte direction, byte messageCode)
+        {
+            pos = 0;
+            buffer = new List<byte> { direction, messageCode };
             data = buffer.ToArray();
         }
 

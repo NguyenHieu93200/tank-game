@@ -8,11 +8,35 @@ namespace TankServer
     {
         sError,
         sConnect,
+        sRoomInfo,
+        sRoomList,
+        sGameStart,
+        sTankPosition,
+        sTankShoot,
+        sTankSpecial,
+        sTankHealth,
+        sTankDeath,
+        sWinRound,
+        sWinGame,
+        sDisconnect
     }
 
     public enum ClientPackets
     {
-        cConnect = 1
+        cConnect = 1,
+        cCreateRoom,
+        cRoomList,
+        cJoinRoom,
+        cInfoChange,
+        cStartGame,
+        cTankMove,
+        cTankShoot,
+        cTankSpecial,
+        cTankHealth,
+        cTankDeath,
+        cWinRound,
+        cWinGame,
+        cDisconnect
     }
 
     internal class Packet
@@ -36,6 +60,13 @@ namespace TankServer
             data = buffer.ToArray();
         }
 
+        public Packet(byte direction, byte messageCode)
+        {
+            pos = 0;
+            buffer = new List<byte> { direction, messageCode };
+            data = buffer.ToArray();
+        }
+
         public byte[] ToArray()
         {
             data = buffer.ToArray();
@@ -46,6 +77,12 @@ namespace TankServer
         {
             data = buffer.ToArray();
             return BitConverter.ToString(data).Replace("-", " ");
+        }
+
+        public void OverwriteHeader(byte direction, byte messageCode)
+        {
+            buffer[0] = direction;
+            buffer[1] = messageCode;
         }
 
         public void Write(byte _data)

@@ -9,12 +9,7 @@ namespace TankClient
         public static void ConnectSender(string username)
         {
             Client.instance.username = username;
-            List<byte> data = new List<byte>
-            {
-                (byte)0x00,
-                (byte)ClientPackets.cConnect
-            };
-            Packet packet = new Packet(data.ToArray());
+            Packet packet = new Packet(0x00, (byte)ClientPackets.cConnect);
             packet.Write(username);
             Client.instance.tcp.SendData(packet);
         }
