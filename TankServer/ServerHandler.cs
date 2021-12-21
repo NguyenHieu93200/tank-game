@@ -71,6 +71,10 @@ namespace TankServer
                 case (byte)ClientPackets.cDisconnect:
                     DisconnectHandler(_clientId, packet);
                     break;
+                //cLeaveRoom
+                case (byte)ClientPackets.cLeaveRoom:
+                    LeaveRoomHandler(_clientId, packet);
+                    break;
             }
         }
 
@@ -240,6 +244,24 @@ namespace TankServer
             {
                 Server.rooms[_roomId].RemoveClient(Server.clients[_client]);
                 Console.WriteLine($"Client {_clientId} has disconnected.");
+            }
+        }
+
+        //cLeaveRoom
+        private static void LeaveRoomHandler(int _clientId, Packet packet)
+        {
+            int _client = packet.ReadInt();
+            int _roomId = packet.ReadInt();
+            ServerSender.LeaveRoomSender(packet, _roomId);
+            if (_client == Server.rooms[_roomId].hostId)
+            {
+                Server.rooms[_roomId].CloseRoom();
+                Console.WriteLine($"Client {_clientId} who is host, has left room. Room {_roomId} is closed.");
+            }
+            else
+            {
+                Server.rooms[_roomId].RemoveClient(Server.clients[_client]);
+                Console.WriteLine($"Client {_clientId} has left room.");
             }
         }
 

@@ -18,7 +18,8 @@ namespace TankServer
         sTankDeath,
         sWinRound,
         sWinGame,
-        sDisconnect
+        sDisconnect,
+        sLeaveRoom
     }
 
     public enum ClientPackets
@@ -36,7 +37,8 @@ namespace TankServer
         cTankDeath,
         cWinRound,
         cWinGame,
-        cDisconnect
+        cDisconnect,
+        cLeaveRoom
     }
 
     internal class Packet

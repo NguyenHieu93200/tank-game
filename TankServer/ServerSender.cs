@@ -167,5 +167,15 @@ namespace TankServer
             }
         }
 
+        //sLeaveRoom
+        public static void LeaveRoomSender(Packet packet, int _roomId)
+        {
+            packet.OverwriteHeader(0x01, (byte)ServerPackets.sLeaveRoom);
+            foreach (Client _client in Server.rooms[_roomId].GetClient())
+            {
+                _client.tcp.SendData(packet);
+            }
+        }
+
     }
 }
