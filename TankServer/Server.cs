@@ -59,7 +59,7 @@ namespace TankServer
             {
                 clients.Add(i, new Client(i));
             }
-            for (int i = 1;i <= MaxRooms; i++)
+            for (int i = 1; i <= MaxRooms; i++)
             {
                 rooms.Add(i, null);
             }

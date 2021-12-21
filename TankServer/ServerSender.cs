@@ -29,17 +29,19 @@ namespace TankServer
             Packet packet = new Packet(0x01, (byte)ServerPackets.sRoomInfo);
             packet.Write(_roomId);
             packet.Write(Server.rooms[_roomId].roomName);
-            packet.Write(Server.rooms[_roomId].clients.Count);
-            for (int i = 0; i < Server.rooms[_roomId].clients.Count; i++)
+            packet.Write(Server.rooms[_roomId].hostId);
+            List<Client> clients = Server.rooms[_roomId].GetClient();
+            packet.Write(clients.Count);
+            for (int i = 0; i < Server.rooms[_roomId].GetClient().Count; i++)
             {
-                packet.Write(Server.rooms[_roomId].clients[i].id);
-                packet.Write(Server.rooms[_roomId].clients[i].username);
-                packet.Write(Server.rooms[_roomId].clients[i].teamId);
-                packet.Write(Server.rooms[_roomId].clients[i].tankId);
+                packet.Write(clients[i].id);
+                packet.Write(clients[i].username);
+                packet.Write(clients[i].teamId);
+                packet.Write(clients[i].tankId);
             }
             if (_toAll)
             {
-                foreach (Client _client in Server.rooms[_roomId].clients)
+                foreach (Client _client in clients)
                 {
                     _client.tcp.SendData(packet);
                 }
@@ -55,17 +57,17 @@ namespace TankServer
         {
             Packet packet = new Packet(0x01, (byte)ServerPackets.sRoomList);
             int count = 0;
-            for (int i = 0; i <= Server.rooms.Count; i++)
+            for (int i = 1; i <= Server.rooms.Count; i++)
             {
-                if (!Server.rooms[i].isInGame)
+                if (Server.rooms[i] != null && !Server.rooms[i].isInGame)
                 {
                     count++;
                 }
             }
             packet.Write(count);
-            for (int i = 0; i <= Server.rooms.Count; i++)
+            for (int i = 1; i <= Server.rooms.Count; i++)
             {
-                if (!Server.rooms[i].isInGame)
+                if (Server.rooms[i] != null && !Server.rooms[i].isInGame)
                 {
                     packet.Write(Server.rooms[i].roomId);
                     packet.Write(Server.rooms[i].roomName);
@@ -89,7 +91,7 @@ namespace TankServer
         public static void TankPositionSender(Packet packet, int _roomId)
         {
             packet.OverwriteHeader(0x01, (byte)ServerPackets.sTankPosition);
-            foreach (Client _client in Server.rooms[_roomId].clients)
+            foreach (Client _client in Server.rooms[_roomId].GetClient())
             {
                 _client.tcp.SendData(packet);
             }
@@ -99,7 +101,7 @@ namespace TankServer
         public static void TankShootSender(Packet packet, int _roomId)
         {
             packet.OverwriteHeader(0x01, (byte)ServerPackets.sTankShoot);
-            foreach (Client _client in Server.rooms[_roomId].clients)
+            foreach (Client _client in Server.rooms[_roomId].GetClient())
             {
                 _client.tcp.SendData(packet);
             }
@@ -109,7 +111,7 @@ namespace TankServer
         public static void TankSpecialSender(Packet packet, int _roomId)
         {
             packet.OverwriteHeader(0x01, (byte)ServerPackets.sTankSpecial);
-            foreach (Client _client in Server.rooms[_roomId].clients)
+            foreach (Client _client in Server.rooms[_roomId].GetClient())
             {
                 _client.tcp.SendData(packet);
             }
@@ -119,7 +121,7 @@ namespace TankServer
         public static void TankHealthSender(Packet packet, int _roomId)
         {
             packet.OverwriteHeader(0x01, (byte)ServerPackets.sTankHealth);
-            foreach (Client _client in Server.rooms[_roomId].clients)
+            foreach (Client _client in Server.rooms[_roomId].GetClient())
             {
                 _client.tcp.SendData(packet);
             }
@@ -129,7 +131,7 @@ namespace TankServer
         public static void TankDeathSender(Packet packet, int _roomId)
         {
             packet.OverwriteHeader(0x01, (byte)ServerPackets.sTankDeath);
-            foreach (Client _client in Server.rooms[_roomId].clients)
+            foreach (Client _client in Server.rooms[_roomId].GetClient())
             {
                 _client.tcp.SendData(packet);
             }
@@ -139,7 +141,7 @@ namespace TankServer
         public static void WinRoundSender(Packet packet, int _roomId)
         {
             packet.OverwriteHeader(0x01, (byte)ServerPackets.sWinRound);
-            foreach (Client _client in Server.rooms[_roomId].clients)
+            foreach (Client _client in Server.rooms[_roomId].GetClient())
             {
                 _client.tcp.SendData(packet);
             }
@@ -149,7 +151,7 @@ namespace TankServer
         public static void WinGameSender(Packet packet, int _roomId)
         {
             packet.OverwriteHeader(0x01, (byte)ServerPackets.sWinGame);
-            foreach (Client _client in Server.rooms[_roomId].clients)
+            foreach (Client _client in Server.rooms[_roomId].GetClient())
             {
                 _client.tcp.SendData(packet);
             }
@@ -159,7 +161,7 @@ namespace TankServer
         public static void DisconnectSender(Packet packet, int _roomId)
         {
             packet.OverwriteHeader(0x01, (byte)ServerPackets.sDisconnect);
-            foreach (Client _client in Server.rooms[_roomId].clients)
+            foreach (Client _client in Server.rooms[_roomId].GetClient())
             {
                 _client.tcp.SendData(packet);
             }

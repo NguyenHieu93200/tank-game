@@ -44,6 +44,10 @@ namespace TankClient
         private static void CreateRoom()
         {
             Console.WriteLine("CreateRoom");
+            Packet packet = new Packet(0x00, (byte)ClientPackets.cCreateRoom);
+            packet.Write(Client.instance.id);
+            packet.Write("Weird room.");
+            Client.instance.tcp.SendData(packet);
         }
 
         private static void JoinRoom()

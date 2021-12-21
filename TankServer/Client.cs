@@ -13,7 +13,7 @@ namespace TankServer
         public int id;
         public string username;
         public int roomId;
-        public int teamId;
+        public byte teamId;
         public int tankId;
         public TCP tcp;
 
@@ -83,6 +83,7 @@ namespace TankServer
                     if (socket != null)
                     {
                         stream.BeginWrite(_buffer, 0, _buffer.Length, null, null);
+                        Console.Write($"Send to {id}: ");
                         Console.WriteLine(_packet.ToHexString());
                     }
                 }
