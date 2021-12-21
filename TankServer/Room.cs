@@ -74,6 +74,11 @@ namespace TankServer
 
         public void RemoveClient(Client _client)
         {
+            if (GetClient().Count == 1)
+            {
+                CloseRoom();
+                return;
+            }
             teams[_client.teamId].Remove(_client);
             _client.roomId = 0;
             _client.tankId = 0;

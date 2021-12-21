@@ -16,6 +16,14 @@ namespace TankClient
         public int id;
         public string username;
 
+        public int roomId;
+        public string roomName;
+        public int hostId;
+
+        public List<Player> players;
+        public List<Room> rooms;
+
+
         public Client(string _ip, int _port)
         {
             instance = this;
@@ -23,6 +31,8 @@ namespace TankClient
             port = _port;
             tcp = new TCP(_ip, _port);
             tcp.Connect();
+            players = new List<Player>();
+            rooms = new List<Room>();
         }
 
         public class TCP
@@ -73,7 +83,7 @@ namespace TankClient
                     }
 
                     byte[] _data = new byte[_bufferSize];
-                    
+
                     Array.Copy(buffer, _data, _bufferSize);
 
                     PacketHandler.Handle(_data);
@@ -118,6 +128,25 @@ namespace TankClient
             tcp.Disconnect();
             instance = null;
             Console.WriteLine("Disconnected.");
+        }
+    }
+
+    public class Room
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public int NumberOfMembers { get; set; }
+
+        public Room(int _id, string _name, int _numberOfMembers)
+        {
+            Id = _id;
+            Name = _name;
+            NumberOfMembers = _numberOfMembers;
+        }
+
+        public void Print()
+        {
+            Console.WriteLine($"{Id}: Room {Name} has {NumberOfMembers} members.");
         }
     }
 }

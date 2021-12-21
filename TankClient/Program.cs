@@ -20,44 +20,102 @@ namespace TankClient
                 Console.WriteLine("Can't connect to server. Please try again soon.");
             }
             PacketSender.ConnectSender(username);
+            Client.instance.username = username;
 
             RoomMenu();
-            Console.ReadKey();
+
+            while (true) ;
         }
 
-        private static void RoomMenu()
+        public static void RoomMenu()
         {
-            Console.WriteLine("What do you want to do?\n1. Create room\n2. Join room\nOther key to exit.");
-            switch (Console.ReadKey(true).Key)
+            Console.WriteLine("What do you want to do?\n1. Create room\n2. Get room list\n3. Join room\nEcs to exit.");
+
+            while (true)
             {
-                case ConsoleKey.D1:
-                    CreateRoom();
-                    break;
-                case ConsoleKey.D2:
-                    JoinRoom();
-                    break;
-                default:
-                    break;
-            };
+                switch (Console.ReadKey(true).Key)
+                {
+                    case ConsoleKey.D1:
+                        CreateRoom();
+                        return;
+                    case ConsoleKey.D2:
+                        GetRoomList();
+                        return;
+                    case ConsoleKey.Escape:
+                        Environment.Exit(0);
+                        break;
+                };
+            }
         }
 
-        private static void CreateRoom()
+        public static void CreateRoom()
         {
-            Console.WriteLine("CreateRoom");
-            Packet packet = new Packet(0x00, (byte)ClientPackets.cCreateRoom);
-            packet.Write(Client.instance.id);
-            packet.Write("Weird room.");
-            Client.instance.tcp.SendData(packet);
+            Console.WriteLine("CreateRoom: ");
+            Console.Write("Enter room name: ");
+            string _roomName = Console.ReadLine();
+            PacketSender.CreateRoomSender(Client.instance.id, _roomName);
         }
 
-        private static void JoinRoom()
+        public static void GetRoomList()
         {
-            Console.WriteLine("JoinRoom");
+            Console.WriteLine("JoinRoom: ");
+            PacketSender.RoomListSender();
+        }
+
+        public static void JoinRoom()
+        {
+            int i = 0;
+            foreach (Room room in Client.instance.rooms)
+            {
+                Console.Write($"{i++}) ");
+                room.Print();
+            }
+            Console.WriteLine("Choose a room: ");
+            int _idchoose = Convert.ToInt32(Console.ReadLine());
+            PacketSender.JoinRoomSender(Client.instance.id, Client.instance.rooms[_idchoose].Id);
         }
 
         private static void RoomInfo()
         {
+            Console.WriteLine($"Room {Client.instance.roomName}:");
+            foreach (Player player in Client.instance.players)
+            {
+                player.Print();
+            }
+        }
 
+        public static void InsideRoom()
+        {
+            RoomInfo();
+            Console.WriteLine("What do you want to do?\n1. Start Game\n2. Leave Room\nEcs to exit.");
+
+            while (true)
+            {
+                switch (Console.ReadKey(true).Key)
+                {
+                    case ConsoleKey.D1:
+                        StartGame();
+                        return;
+                    case ConsoleKey.D2:
+                        LeaveRoom();
+                        return;
+                    case ConsoleKey.Escape:
+                        Environment.Exit(0);
+                        return;
+                };
+            }
+        }
+
+        private static void StartGame()
+        {
+            Console.WriteLine("Undercontruct...");
+            RoomMenu();
+        }
+
+        private static void LeaveRoom()
+        {
+            Console.WriteLine("Undercontruct...");
+            RoomMenu();
         }
     }
 }

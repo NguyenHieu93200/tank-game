@@ -71,7 +71,7 @@ namespace TankServer
                 {
                     packet.Write(Server.rooms[i].roomId);
                     packet.Write(Server.rooms[i].roomName);
-                    packet.Write(Server.rooms[i].clients.Count);
+                    packet.Write(Server.rooms[i].GetClient().Count);
                 }
             }
             Server.clients[_clientId].tcp.SendData(packet);

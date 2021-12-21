@@ -8,19 +8,25 @@ namespace TankClient
         public string username;
         public Tank tank;
 
-        public int team;
+        public byte team;
 
         public int health;
         public float xPos;
         public float yPos;
         public float angle;
 
-        public Player(int _playerId, string _username, int _tankId)
+        public Player(int _playerId, string _username, byte _team, byte _tankId)
         {
             playerId = _playerId;
             username = _username;
             tank = Tank.CreateTank(_tankId);
             health = tank.maxhealth;
+            team = _team;
+        }
+
+        public void Print()
+        {
+            Console.WriteLine($"Player: {username} - tank: {tank.tankName} - team: {team}");
         }
     }
 }

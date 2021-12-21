@@ -14,7 +14,7 @@ namespace TankServer
         public string username;
         public int roomId;
         public byte teamId;
-        public int tankId;
+        public byte tankId;
         public TCP tcp;
 
         public Client(int _id)
@@ -105,6 +105,10 @@ namespace TankServer
 
         public void Disconnect()
         {
+            if (roomId != 0)
+            {
+                Server.rooms[roomId].RemoveClient(Server.clients[id]);
+            }
             Console.WriteLine($"{tcp.socket.Client.RemoteEndPoint} has disconnected.");
             username = null;
             tcp.Disconnect();
