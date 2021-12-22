@@ -86,13 +86,13 @@ namespace TankClient
 
                     Array.Copy(buffer, _data, _bufferSize);
 
-                    PacketHandler.Handle(_data);
-
                     stream.BeginRead(buffer, 0, DataBufferSize, ReceiveCallback, null);
+
+                    PacketHandler.Handle(_data);
                 }
                 catch (Exception _ex)
                 {
-                    Console.WriteLine(_ex);
+                    Console.WriteLine(_ex.Message);
                     instance.Disconnect();
                 }
             }
@@ -110,7 +110,7 @@ namespace TankClient
                 catch (Exception _ex)
                 {
                     instance.Disconnect();
-                    Console.WriteLine($"Error sending data to server via TCP: {_ex}");
+                    Console.WriteLine($"Error sending data to server via TCP: {_ex.Message}");
                 }
             }
 

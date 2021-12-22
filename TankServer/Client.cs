@@ -70,7 +70,7 @@ namespace TankServer
                 }
                 catch (Exception _ex)
                 {
-                    Console.WriteLine(_ex);
+                    Console.WriteLine(_ex.Message);
                     Server.clients[id].Disconnect();
                 }
             }
@@ -90,7 +90,7 @@ namespace TankServer
                 catch (Exception _ex)
                 {
                     Server.clients[id].Disconnect();
-                    Console.WriteLine($"Error sending data to server via TCP: {_ex}");
+                    Console.WriteLine($"Error sending data to server via TCP: {_ex.Message}");
                 }
             }
 

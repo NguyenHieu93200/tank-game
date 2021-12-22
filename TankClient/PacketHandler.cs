@@ -99,6 +99,7 @@ namespace TankClient
         {
             try
             {
+                Client.instance.players.Clear();
                 Client.instance.roomId = packet.ReadInt();
                 Client.instance.roomName = packet.ReadString();
                 Client.instance.hostId = packet.ReadInt();
@@ -120,6 +121,7 @@ namespace TankClient
         {
             try
             {
+                Client.instance.rooms.Clear();
                 int roomCount = packet.ReadInt();
                 for (int i = 0; i < roomCount; i++)
                 {
