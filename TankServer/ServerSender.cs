@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace TankServer
 {
@@ -9,7 +7,7 @@ namespace TankServer
         //sError
         public static void ErrorSender(int _clientId, string _message)
         {
-            Packet packet = new Packet(0x01, (byte)ServerPackets.sError);
+            Packet packet = new(0x01, (byte)ServerPackets.sError);
             packet.Write(_message);
             Server.clients[_clientId].tcp.SendData(packet);
 
@@ -18,7 +16,7 @@ namespace TankServer
         //sConnect
         public static void ConnectSender(int _clientId)
         {
-            Packet packet = new Packet(0x01, (byte)ServerPackets.sConnect);
+            Packet packet = new(0x01, (byte)ServerPackets.sConnect);
             packet.Write(_clientId);
             Server.clients[_clientId].tcp.SendData(packet);
         }
@@ -26,7 +24,7 @@ namespace TankServer
         //sRoomInfo
         public static void RoomInfoSender(int _clientId, int _roomId, bool _toAll = false)
         {
-            Packet packet = new Packet(0x01, (byte)ServerPackets.sRoomInfo);
+            Packet packet = new(0x01, (byte)ServerPackets.sRoomInfo);
             packet.Write(_roomId);
             packet.Write(Server.rooms[_roomId].roomName);
             packet.Write(Server.rooms[_roomId].hostId);
@@ -55,7 +53,7 @@ namespace TankServer
         //sRoomList
         public static void RoomListSender(int _clientId)
         {
-            Packet packet = new Packet(0x01, (byte)ServerPackets.sRoomList);
+            Packet packet = new(0x01, (byte)ServerPackets.sRoomList);
             int count = 0;
             for (int i = 1; i <= Server.rooms.Count; i++)
             {
@@ -80,8 +78,8 @@ namespace TankServer
         //sGameStart
         public static void GameStartSender(int _roomId)
         {
-            Packet packet = new Packet(0x01, (byte)ServerPackets.sGameStart);
-            foreach (Client _client in Server.rooms[_roomId].clients)
+            Packet packet = new(0x01, (byte)ServerPackets.sGameStart);
+            foreach (Client _client in Server.rooms[_roomId].GetClient())
             {
                 _client.tcp.SendData(packet);
             }

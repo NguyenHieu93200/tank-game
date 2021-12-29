@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net.Sockets;
 using System.Net;
-using System.Text;
+using System.Net.Sockets;
 
 namespace TankServer
 {
     internal class Server
     {
         public static int MaxPlayers { get; private set; }
-        public static int MaxRooms { get; private set; }   
+        public static int MaxRooms { get; private set; }
         public static int Port { get; private set; }
-        public static Dictionary<int, Client> clients = new Dictionary<int, Client>();
-        public static Dictionary<int, Room> rooms = new Dictionary<int,Room>();
+        public static Dictionary<int, Client> clients = new();
+        public static Dictionary<int, Room> rooms = new();
 
         private static TcpListener tcpListener = null;
 

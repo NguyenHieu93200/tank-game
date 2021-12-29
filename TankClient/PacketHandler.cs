@@ -33,42 +33,42 @@ namespace TankClient
                 case (byte)ServerPackets.sGameStart:
                     GameStartHandler(packet);
                     break;
-                ////sTankPosition,
-                //case (byte)ServerPackets.sTankPosition:
-                //    TankPositionHandler(packet);
-                //    break;
-                ////sTankShoot,
-                //case (byte)ServerPackets.sTankShoot:
-                //    TankShootHandler(packet);
-                //    break;
-                ////sTankSpecial,
-                //case (byte)ServerPackets.sTankSpecial:
-                //    TankSpecialHandler(packet);
-                //    break;
-                ////sTankHealth,
-                //case (byte)ServerPackets.sTankHealth:
-                //    TankHealthHandler(packet);
-                //    break;
-                ////sTankDeath,
-                //case (byte)ServerPackets.sTankDeath:
-                //    TankDeathHandler(packet);
-                //    break;
-                ////sWinRound,
-                //case (byte)ServerPackets.sWinRound:
-                //    WinRoundHandler(packet);
-                //    break;
-                ////sWinGame,
-                //case (byte)ServerPackets.sWinGame:
-                //    WinGameHandler(packet);
-                //    break;
-                ////sDisconnect
-                //case (byte)ServerPackets.sDisconnect:
-                //    DisconnectHandler(packet);
-                //    break;
-                ////sLeaveRoom
-                //case (byte)ServerPackets.sLeaveRoom:
-                //    DisconnectHandler(packet);
-                //    break;
+                //sTankPosition,
+                case (byte)ServerPackets.sTankPosition:
+                    TankPositionHandler(packet);
+                    break;
+                //sTankShoot,
+                case (byte)ServerPackets.sTankShoot:
+                    TankShootHandler(packet);
+                    break;
+                //sTankSpecial,
+                case (byte)ServerPackets.sTankSpecial:
+                    TankSpecialHandler(packet);
+                    break;
+                //sTankHealth,
+                case (byte)ServerPackets.sTankHealth:
+                    TankHealthHandler(packet);
+                    break;
+                //sTankDeath,
+                case (byte)ServerPackets.sTankDeath:
+                    TankDeathHandler(packet);
+                    break;
+                //sWinRound,
+                case (byte)ServerPackets.sWinRound:
+                    WinRoundHandler(packet);
+                    break;
+                //sWinGame,
+                case (byte)ServerPackets.sWinGame:
+                    WinGameHandler(packet);
+                    break;
+                //sDisconnect
+                case (byte)ServerPackets.sDisconnect:
+                    DisconnectHandler(packet);
+                    break;
+                //sLeaveRoom
+                case (byte)ServerPackets.sLeaveRoom:
+                    LeaveRoomHandler(packet);
+                    break;
             }
         }
 
@@ -141,6 +141,14 @@ namespace TankClient
             try
             {
                 int _clientId = packet.ReadInt();
+                if (Client.instance.id == _clientId)
+                {
+                    Client.instance.players.Clear();
+                    Client.instance.roomId = 0;
+                    Client.instance.roomName = "";
+                    Client.instance.hostId = 0;
+                    return;
+                }
                 foreach (Player player in Client.instance.players)
                 {
                     if (player.playerId == _clientId)
@@ -149,6 +157,7 @@ namespace TankClient
                         break;
                     }
                 }
+                Program.RoomInfo();
             }
             catch (Exception ex)
             {
@@ -161,11 +170,12 @@ namespace TankClient
         {
             try
             {
-
+                Console.WriteLine("------------------------------------------------");
+                Console.WriteLine("Start game!!!");
             }
-            catch
+            catch (Exception ex)
             {
-
+                Console.WriteLine(ex);
             }
         }
         //sTankPosition,
@@ -173,20 +183,106 @@ namespace TankClient
         {
             try
             {
-
+                Console.WriteLine("------------------------------------------------");
+                Console.WriteLine("Start game!!!");
             }
-            catch
+            catch (Exception ex)
             {
-
+                Console.WriteLine(ex);
             }
         }
+
         //sTankShoot,
+        private static void TankShootHandler(Packet packet)
+        {
+            try
+            {
+                Console.WriteLine("------------------------------------------------");
+                Console.WriteLine("Start game!!!");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
         //sTankSpecial,
+        private static void TankSpecialHandler(Packet packet)
+        {
+            try
+            {
+                Console.WriteLine("------------------------------------------------");
+                Console.WriteLine("Start game!!!");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
         //sTankHealth,
+        private static void TankHealthHandler(Packet packet)
+        {
+            try
+            {
+                Console.WriteLine("------------------------------------------------");
+                Console.WriteLine("Start game!!!");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
         //sTankDeath,
+        private static void TankDeathHandler(Packet packet)
+        {
+            try
+            {
+                Console.WriteLine("------------------------------------------------");
+                Console.WriteLine("Start game!!!");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
         //sWinRound,
+        private static void WinRoundHandler(Packet packet)
+        {
+            try
+            {
+                Console.WriteLine("------------------------------------------------");
+                Console.WriteLine("Start game!!!");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
         //sWinGame,
+        private static void WinGameHandler(Packet packet)
+        {
+            try
+            {
+                Console.WriteLine("------------------------------------------------");
+                Console.WriteLine("Start game!!!");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
         //sDisconnect
+        private static void DisconnectHandler(Packet packet)
+        {
+            try
+            {
+                Console.WriteLine("------------------------------------------------");
+                Console.WriteLine("Start game!!!");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
 
     }
 }

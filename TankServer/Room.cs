@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace TankServer
 {
@@ -10,7 +8,6 @@ namespace TankServer
         public int roomId;
         public string roomName;
         public int hostId;
-        public List<Client> clients;
         public List<Client>[] teams = new List<Client>[2];
         public bool isInGame;
 
@@ -66,7 +63,7 @@ namespace TankServer
 
         public List<Client> GetClient()
         {
-            List<Client> clients = new List<Client>();
+            List<Client> clients = new();
             clients.AddRange(teams[0]);
             clients.AddRange(teams[1]);
             return clients;

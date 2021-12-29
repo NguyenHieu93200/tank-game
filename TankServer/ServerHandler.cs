@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace TankServer
 {
@@ -8,7 +6,7 @@ namespace TankServer
     {
         public static void Handle(int _clientId, byte[] _data)
         {
-            Packet packet = new Packet(_data);
+            Packet packet = new(_data);
             Console.Write($"Receive from {_clientId}: ");
             Console.WriteLine(packet.ToHexString());
             packet.ReadByte();
@@ -25,47 +23,47 @@ namespace TankServer
                     break;
                 //cRoomList
                 case (byte)ClientPackets.cRoomList:
-                    RoomListHandler(_clientId, packet);
+                    RoomListHandler(_clientId);
                     break;
                 //cJoinRoom
                 case (byte)ClientPackets.cJoinRoom:
-                    JoinRoomHandler(_clientId, packet);
+                    JoinRoomHandler(packet);
                     break;
                 //cInfoChange
                 case (byte)ClientPackets.cInfoChange:
-                    InfoChangeHandler(_clientId, packet);
+                    InfoChangeHandler(packet);
                     break;
                 //cStartGame
                 case (byte)ClientPackets.cStartGame:
-                    StartGameHandler(_clientId, packet);
+                    StartGameHandler(packet);
                     break;
                 //cTankMove
                 case (byte)ClientPackets.cTankMove:
-                    TankMoveHandler(_clientId, packet);
+                    TankMoveHandler(packet);
                     break;
                 //cTankShoot
                 case (byte)ClientPackets.cTankShoot:
-                    TankShootHandler(_clientId, packet);
+                    TankShootHandler(packet);
                     break;
                 //cTankSpecial
                 case (byte)ClientPackets.cTankSpecial:
-                    TankSpecialHandler(_clientId, packet);
+                    TankSpecialHandler(packet);
                     break;
                 //cTankHealth
                 case (byte)ClientPackets.cTankHealth:
-                    TankHealthHandler(_clientId, packet);
+                    TankHealthHandler(packet);
                     break;
                 //cTankDeath
                 case (byte)ClientPackets.cTankDeath:
-                    TankDeathHandler(_clientId, packet);
+                    TankDeathHandler(packet);
                     break;
                 //cWinRound
                 case (byte)ClientPackets.cWinRound:
-                    WinRoundHandler(_clientId, packet);
+                    WinRoundHandler(packet);
                     break;
                 //cWinGame
                 case (byte)ClientPackets.cWinGame:
-                    WinGameHandler(_clientId, packet);
+                    WinGameHandler(packet);
                     break;
                 //cDisconnect
                 case (byte)ClientPackets.cDisconnect:
@@ -106,18 +104,18 @@ namespace TankServer
         }
 
         //cRoomList
-        private static void RoomListHandler(int _clientId, Packet packet)
+        private static void RoomListHandler(int _clientId)
         {
             ServerSender.RoomListSender(_clientId);
             Console.WriteLine($"Sent Room list to client {_clientId}.");
         }
 
         //cJoinRoom
-        private static void JoinRoomHandler(int _clientId, Packet packet)
+        private static void JoinRoomHandler(Packet packet)
         {
             int _client = packet.ReadInt();
             int _roomId = packet.ReadInt();
-            if (Server.rooms[_roomId].GetClient().Count < Room.MaxPlayersPerTeam*2)
+            if (Server.rooms[_roomId].GetClient().Count < Room.MaxPlayersPerTeam * 2)
             {
                 Server.rooms[_roomId].AddClient(Server.clients[_client]);
                 ServerSender.RoomInfoSender(_client, _roomId, _toAll: true);
@@ -131,7 +129,7 @@ namespace TankServer
         }
 
         //cInfoChange
-        private static void InfoChangeHandler(int _clientId, Packet packet)
+        private static void InfoChangeHandler(Packet packet)
         {
             int _client = packet.ReadInt();
             int _roomId = packet.ReadInt();
@@ -156,7 +154,7 @@ namespace TankServer
         }
 
         //cStartGame
-        private static void StartGameHandler(int _clientId, Packet packet)
+        private static void StartGameHandler(Packet packet)
         {
             int _roomId = packet.ReadInt();
             Server.rooms[_roomId].isInGame = true;
@@ -165,7 +163,7 @@ namespace TankServer
         }
 
         //cTankMove
-        private static void TankMoveHandler(int _clientId, Packet packet)
+        private static void TankMoveHandler(Packet packet)
         {
             int _client = packet.ReadInt();
             int _roomId = packet.ReadInt();
@@ -174,7 +172,7 @@ namespace TankServer
         }
 
         //cTankShoot
-        private static void TankShootHandler(int _clientId, Packet packet)
+        private static void TankShootHandler(Packet packet)
         {
             int _client = packet.ReadInt();
             int _roomId = packet.ReadInt();
@@ -183,7 +181,7 @@ namespace TankServer
         }
 
         //cTankSpecial
-        private static void TankSpecialHandler(int _clientId, Packet packet)
+        private static void TankSpecialHandler(Packet packet)
         {
             int _client = packet.ReadInt();
             int _roomId = packet.ReadInt();
@@ -192,7 +190,7 @@ namespace TankServer
         }
 
         //cTankHealth
-        private static void TankHealthHandler(int _clientId, Packet packet)
+        private static void TankHealthHandler(Packet packet)
         {
             int _client = packet.ReadInt();
             int _roomId = packet.ReadInt();
@@ -201,7 +199,7 @@ namespace TankServer
         }
 
         //cTankDeath
-        private static void TankDeathHandler(int _clientId, Packet packet)
+        private static void TankDeathHandler(Packet packet)
         {
             int _client = packet.ReadInt();
             int _roomId = packet.ReadInt();
@@ -210,7 +208,7 @@ namespace TankServer
         }
 
         //cWinRound
-        private static void WinRoundHandler(int _clientId, Packet packet)
+        private static void WinRoundHandler(Packet packet)
         {
             int _roomId = packet.ReadInt();
             byte _teamId = packet.ReadByte();
@@ -219,7 +217,7 @@ namespace TankServer
         }
 
         //cWinGame
-        private static void WinGameHandler(int _clientId, Packet packet)
+        private static void WinGameHandler(Packet packet)
         {
             int _roomId = packet.ReadInt();
             byte _teamId = packet.ReadByte();
