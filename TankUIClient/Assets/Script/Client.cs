@@ -19,7 +19,7 @@ public class Client : MonoBehaviour
     public string roomName;
     public int hostId;
     public List<PlayerInfo> players;
-    //    public List<Room> rooms;
+    public List<Room> rooms;
 
     private void Awake()
     {

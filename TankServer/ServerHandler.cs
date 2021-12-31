@@ -232,7 +232,7 @@ namespace TankServer
         {
             int _client = packet.ReadInt();
             int _roomId = packet.ReadInt();
-            ServerSender.DisconnectSender(packet, _roomId);
+            ServerSender.DisconnectSender(_client, _roomId);
             if (_client == Server.rooms[_roomId].hostId)
             {
                 Server.rooms[_roomId].CloseRoom();

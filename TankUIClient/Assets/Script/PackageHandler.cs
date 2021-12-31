@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
+
 namespace TankClient
 {
     internal class PacketHandler
@@ -28,7 +29,7 @@ namespace TankClient
                     break;
                 //sRoomList,
                 case (byte)ServerPackets.sRoomList:
-                    //RoomListHandler(packet);
+                    RoomListHandler(packet);
                     break;
                 //sGameStart,
                 case (byte)ServerPackets.sGameStart:
@@ -123,23 +124,39 @@ namespace TankClient
         }
 
         //sRoomList,
-/*        private static void RoomListHandler(Packet packet)
+        private static void RoomListHandler(Packet packet)
         {
+            Debug.Log("hello");
             try
             {
-                Client.instance.rooms.Clear();
+                if (Client.instance.rooms != null)
+                {
+                    Client.instance.rooms.Clear();
+                }else
+                {
+                    Client.instance.rooms = new List<Room>();
+                }
                 int roomCount = packet.ReadInt();
                 for (int i = 0; i < roomCount; i++)
                 {
                     Client.instance.rooms.Add(new Room(_id: packet.ReadInt(), _name: packet.ReadString(), _numberOfMembers: packet.ReadInt()));
                 }
-                Program.JoinRoom();
+
+                for (int i = 0; i < roomCount; i++)
+                {
+                    Debug.Log(Client.instance.rooms[i].Name);
+                }
+
+                //TODO
+                RoomListing.instance.ListingRoom(Client.instance.rooms);
+
+                //Program.JoinRoom();
             }
             catch (Exception ex)
             {
                 Debug.Log(ex);
             }
-        }*/
+        }
 
         //sLeaveRoom,
         private static void LeaveRoomHandler(Packet packet)

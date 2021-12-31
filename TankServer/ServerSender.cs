@@ -163,7 +163,10 @@ namespace TankServer
             packet.Write(_roomId);
             foreach (Client _client in Server.rooms[_roomId].GetClient())
             {
-                _client.tcp.SendData(packet);
+                if (_client.id != _clientid)
+                {
+                    _client.tcp.SendData(packet);
+                }
             }
         }
 

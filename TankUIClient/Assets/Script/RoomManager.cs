@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TankClient;
+using UnityEngine.SceneManagement;
 
 public class RoomManager : MonoBehaviour
 {
@@ -31,6 +32,8 @@ public class RoomManager : MonoBehaviour
 
     public void JoinRoom()
     {
-        PacketSender.RoomListSender();
+ 
+       SceneManager.LoadScene(2);
+
     }
 }
