@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
@@ -9,7 +11,9 @@ public class UIManager : MonoBehaviour
 
     public GameObject startMenu;
     public InputField usernameField;
-    public GameObject InputName;
+    public GameObject IpField;
+    public GameObject IpHideButtonImage;
+    public GameObject ErrorText;
 
     private void Awake()
     {
@@ -24,16 +28,43 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        Application.targetFrameRate = 60;
+    }
+
+    public void ShowHideIpField()
+    {
+        if (IpField.activeInHierarchy)
+        {
+            IpField.SetActive(false);
+        } else
+        {
+            IpField.SetActive(true);
+        }
+        IpHideButtonImage.transform.Rotate(180, 0, 0, Space.Self);
+    }
+
     /// <summary>Attempts to connect to the server.</summary>
     public void ConnectToServer()
     {
-
-        
-        Debug.Log("Hello");
+        string ip = "127.0.0.1";
+        if (IpField.activeInHierarchy)
+        {
+            ip = IpField.GetComponent<InputField>().text;
+        }
         Debug.Log(Client.instance.username);
+        string username = usernameField.text;
         startMenu.SetActive(false);
-        usernameField.interactable = false;
-        Debug.Log("Name");
-        Client.instance.Connect();
+        try
+        {
+            Client.instance.Connect(username, ip);
+            SceneManager.LoadScene(1);
+        }
+        catch (Exception)
+        {
+            startMenu.SetActive(true);
+            ErrorText.SetActive(true);
+        }
     }
 }

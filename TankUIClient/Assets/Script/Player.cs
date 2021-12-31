@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class PlayerInfo
 {
         public int playerId;
         public string username;
@@ -15,7 +15,7 @@ public class Player : MonoBehaviour
         public float yPos;
         public float angle;
 
-        public Player(int _playerId, string _username, byte _team, byte _tankId)
+        public PlayerInfo(int _playerId, string _username, byte _team, byte _tankId)
         {
             playerId = _playerId;
             username = _username;
@@ -26,6 +26,6 @@ public class Player : MonoBehaviour
 
         public void Print()
         {
-            //Console.WriteLine($"Player: {username} - tank: {tank.tankName} - team: {team}");
+            Debug.Log($"Player: {username} - team: {team}");
         }
 }

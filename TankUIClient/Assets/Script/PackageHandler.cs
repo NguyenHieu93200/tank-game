@@ -79,11 +79,11 @@ namespace TankClient
             try
             {
                 Client.instance.id = packet.ReadInt();
-                Console.WriteLine($"Receive id: {Client.instance.id} from server.");
+                Debug.Log($"Receive id: {Client.instance.id} from server.");
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                Debug.Log(ex);
                 Client.instance.Disconnect();
             }
         }
@@ -91,7 +91,7 @@ namespace TankClient
         //sError,
         private static void ErrorHandler(Packet packet)
         {
-            Console.WriteLine($"Error: {packet.ReadString()}");
+            Debug.Log($"Error: {packet.ReadString()}");
             Client.instance.Disconnect();
         }
 
@@ -100,19 +100,25 @@ namespace TankClient
         {
             try
             {
-                Client.instance.players.Clear();
+                if (Client.instance.players != null)
+                {
+                    Client.instance.players.Clear();
+                } else
+                {
+                    Client.instance.players = new List<PlayerInfo>();
+                }
                 Client.instance.roomId = packet.ReadInt();
                 Client.instance.roomName = packet.ReadString();
                 Client.instance.hostId = packet.ReadInt();
                 int _memberCount = packet.ReadInt();
                 for (int i = 0; i < _memberCount; i++)
                 {
-                    Client.instance.players.Add(new Player(_playerId: packet.ReadInt(), _username: packet.ReadString(), _team: packet.ReadByte(), _tankId: packet.ReadByte()));
+                    Client.instance.players.Add(new PlayerInfo(_playerId: packet.ReadInt(), _username: packet.ReadString(), _team: packet.ReadByte(), _tankId: packet.ReadByte()));
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                Debug.Log(ex);
             }
         }
 
@@ -131,7 +137,7 @@ namespace TankClient
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                Debug.Log(ex);
             }
         }*/
 
@@ -141,7 +147,7 @@ namespace TankClient
             try
             {
                 int _clientId = packet.ReadInt();
-                foreach (Player player in Client.instance.players)
+                foreach (PlayerInfo player in Client.instance.players)
                 {
                     if (player.playerId == _clientId)
                     {
@@ -152,7 +158,7 @@ namespace TankClient
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                Debug.Log(ex);
             }
         }
 

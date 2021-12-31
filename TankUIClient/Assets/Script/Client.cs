@@ -8,21 +8,21 @@ using UnityEngine.UI;
 
 public class Client : MonoBehaviour
 {
-        public static Client instance = null;
-        public const int DataBufferSize = 4096;
-        public readonly int port = 8000;
-        public readonly string ip = "127.0.0.1";
-        public TCP tcp;
-        public int id;
-        public string username;
-        public int roomId;
-        public string roomName;
-        public int hostId;
-        public List<Player> players;
+    public static Client instance = null;
+    public const int DataBufferSize = 4096;
+    public readonly int port = 8000;
+    public string ip = "127.0.0.1";
+    public TCP tcp;
+    public int id;
+    public string username;
+    public int roomId;
+    public string roomName;
+    public int hostId;
+    public List<PlayerInfo> players;
     //    public List<Room> rooms;
-        
-        private void Awake()
-        {
+
+    private void Awake()
+    {
         if (instance == null)
         {
             instance = this;
@@ -32,114 +32,123 @@ public class Client : MonoBehaviour
             Debug.Log("Instance already exists, destroying object!");
             Destroy(this);
         }
-        }
-        private void OnApplicationQuit()
-        {
+    }
+    private void OnApplicationQuit()
+    {
         Disconnect(); // Disconnect when the game is closed
-        }
-        private void Start()
-        {
+    }
+    
+    public void Connect(string _username, string _ip)
+    {
+        ip = _ip;
+        username = _username;
         tcp = new TCP(ip, port);
-        }
-        public void Connect()
-        {
         tcp.Connect();
-        }
+        PacketSender.ConnectSender(username);
+    }
 
 
     public class TCP
+    {
+        public TcpClient socket;
+        private readonly string ip;
+        private readonly int port;
+
+        private NetworkStream stream;
+        private byte[] buffer;
+
+        public TCP(string _ip, int _port)
         {
-            public TcpClient socket;
-            private readonly string ip = "127.0.0.1";
-            private readonly int port = 8000;
+            ip = _ip;
+            port = _port;
+        }
 
-            private NetworkStream stream;
-            private byte[] buffer;
-
-            public TCP(string _ip, int _port)
+        public void Connect()
+        {
+            socket = new TcpClient
             {
-                ip = _ip;
-                port = _port;
+                ReceiveBufferSize = DataBufferSize,
+                SendBufferSize = DataBufferSize
+            };
+
+            buffer = new byte[DataBufferSize];
+
+            socket.Connect(ip, port);
+
+            if (!socket.Connected)
+            {
+                Debug.Log("Can't connect to server. Please try again.");
+                return;
             }
+            Debug.Log("Connected to server.");
+            stream = socket.GetStream();
 
-            public void Connect()
+            stream.BeginRead(buffer, 0, DataBufferSize, ReceiveCallback, null);
+        }
+
+        private void ReceiveCallback(IAsyncResult _result)
+        {
+            try
             {
-                socket = new TcpClient
-                {
-                    ReceiveBufferSize = DataBufferSize,
-                    SendBufferSize = DataBufferSize
-                };
-
-                buffer = new byte[DataBufferSize];
-                socket.Connect(ip, port);
-                if (!socket.Connected)
-                {
-                    Debug.Log("Can't connect to server. Please try again.");
-                    return;
-                }
-                Debug.Log("Connected to server.");
-                stream = socket.GetStream();
-
-                stream.BeginRead(buffer, 0, DataBufferSize, ReceiveCallback, null);
-            }
-
-            private void ReceiveCallback(IAsyncResult _result)
-            {
-                try
-                {
-                    int _bufferSize = stream.EndRead(_result);
-                    if (_bufferSize <= 0)
-                    {
-                        instance.Disconnect();
-                        return;
-                    }
-
-                    byte[] _data = new byte[_bufferSize];
-
-                    Array.Copy(buffer, _data, _bufferSize);
-
-                    stream.BeginRead(buffer, 0, DataBufferSize, ReceiveCallback, null);
-
-                    PacketHandler.Handle(_data);
-                }
-                catch (Exception _ex)
-                {
-                Debug.Log(_ex.Message);
-                instance.Disconnect();
-                }
-            }
-
-            public void SendData(Packet _packet)
-            {
-                try
-                {
-                    byte[] _buffer = _packet.ToArray();
-                    if (socket != null)
-                    {
-                        stream.BeginWrite(_buffer, 0, _buffer.Length, null, null);
-                    }
-                }
-                catch (Exception _ex)
+                int _bufferSize = stream.EndRead(_result);
+                if (_bufferSize <= 0)
                 {
                     instance.Disconnect();
-                    Debug.Log($"Error sending data to server via TCP: {_ex.Message}");
+                    return;
+                }
+
+                byte[] _data = new byte[_bufferSize];
+
+                Array.Copy(buffer, _data, _bufferSize);
+
+                stream.BeginRead(buffer, 0, DataBufferSize, ReceiveCallback, null);
+
+                PacketHandler.Handle(_data);
+            }
+            catch (Exception _ex)
+            {
+                Debug.Log(_ex.Message);
+                instance.Disconnect();
+            }
+        }
+
+        public void SendData(Packet _packet)
+        {
+            try
+            {
+                byte[] _buffer = _packet.ToArray();
+                if (socket != null)
+                {
+                    stream.BeginWrite(_buffer, 0, _buffer.Length, null, null);
                 }
             }
-
-            public void Disconnect()
+            catch (Exception _ex)
             {
-                socket.Close();
-                stream = null;
-                buffer = null;
-                socket = null;
+                instance.Disconnect();
+                Debug.Log($"Error sending data to server via TCP: {_ex.Message}");
             }
         }
 
         public void Disconnect()
         {
-            tcp.Disconnect();
-            instance = null;
-            Debug.Log("Disconnected.");
+            if (socket != null)
+            {
+                socket.Close();
+            }
+            stream = null;
+            buffer = null;
+            socket = null;
         }
+    }
+
+    public void Disconnect()
+    {
+        if (tcp != null)
+        {
+            tcp.Disconnect();
+        }
+        instance = null;
+        Debug.Log("Disconnected.");
+    }
 }
 
