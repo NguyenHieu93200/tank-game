@@ -37,7 +37,11 @@ public class Client : MonoBehaviour
     {
         Disconnect(); // Disconnect when the game is closed
     }
-    
+    private void Start()
+    {
+        GameObject.DontDestroyOnLoad(this.gameObject);
+    }
+
     public void Connect(string _username, string _ip)
     {
         ip = _ip;
@@ -103,7 +107,11 @@ public class Client : MonoBehaviour
 
                 stream.BeginRead(buffer, 0, DataBufferSize, ReceiveCallback, null);
 
-                PacketHandler.Handle(_data);
+                ThreadManager.ExecuteOnMainThread(() =>
+                {
+                    PacketHandler.Handle(_data);
+                });
+                
             }
             catch (Exception _ex)
             {

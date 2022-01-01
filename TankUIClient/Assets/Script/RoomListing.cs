@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using TankClient;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class RoomListing : MonoBehaviour
 {
@@ -39,5 +41,14 @@ public class RoomListing : MonoBehaviour
         }
     }
 
+    public void Refresh()
+    {
+        SceneManager.LoadScene(2);
+    }
+
+    public void Back()
+    {
+        SceneManager.LoadScene(1);
+    }
 
 }

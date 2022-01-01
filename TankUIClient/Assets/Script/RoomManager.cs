@@ -27,13 +27,12 @@ public class RoomManager : MonoBehaviour
     public void CreateRoom()
     {
         Client.instance.roomName = CreateNameField.text;
+        SceneManager.LoadScene(3);
         PacketSender.CreateRoomSender(Client.instance.id, Client.instance.roomName);
     }
 
     public void JoinRoom()
     {
- 
        SceneManager.LoadScene(2);
-
     }
 }
