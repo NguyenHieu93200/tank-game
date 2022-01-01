@@ -9,7 +9,6 @@ public class PlayerInfo
         //public Tank tank;
 
         public byte team;
-
         public int health;
         public float xPos;
         public float yPos;

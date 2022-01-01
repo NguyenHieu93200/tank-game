@@ -15,9 +15,15 @@ public class Client : MonoBehaviour
     public TCP tcp;
     public int id;
     public string username;
+
     public int roomId;
     public string roomName;
     public int hostId;
+
+    public int count1 = 0 ;
+    public int count2 = 0;
+    public byte team;
+
     public List<PlayerInfo> players;
     public List<Room> rooms;
 

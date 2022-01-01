@@ -66,10 +66,10 @@ public class PacketHandler
             case (byte)ServerPackets.sDisconnect:
                 DisconnectHandler(packet);
                 break;
-                ////sLeaveRoom
-                //case (byte)ServerPackets.sLeaveRoom:
-                //    DisconnectHandler(packet);
-                //    break;
+            //sLeaveRoom
+            case (byte)ServerPackets.sLeaveRoom:
+                LeaveRoomHandler(packet);
+                break;
         }
     }
 
@@ -100,6 +100,8 @@ public class PacketHandler
     {
         try
         {
+            Client.instance.count1 = 0;
+            Client.instance.count2 = 0;
             if (Client.instance.players != null)
             {
                 Client.instance.players.Clear();
@@ -115,6 +117,18 @@ public class PacketHandler
             for (int i = 0; i < _memberCount; i++)
             {
                 Client.instance.players.Add(new PlayerInfo(_playerId: packet.ReadInt(), _username: packet.ReadString(), _team: packet.ReadByte(), _tankId: packet.ReadByte()));
+                if (Client.instance.players[i].playerId == Client.instance.id)
+                {
+                    Client.instance.team = Client.instance.players[i].team;
+                }
+                if (Client.instance.players[i].team == 0)
+                {
+                    Client.instance.count1++;
+                } else
+                {
+                    Client.instance.count2++;
+                }
+
             }
 
             InRoomManager.instance.ListingPlayer(Client.instance.players);
@@ -165,15 +179,30 @@ public class PacketHandler
     {
         try
         {
-            int _clientId = packet.ReadInt();
-            foreach (PlayerInfo player in Client.instance.players)
+            //TODO: host out
+            int _client = packet.ReadInt();
+            if (_client == Client.instance.hostId)
             {
-                if (player.playerId == _clientId)
+                SceneManager.LoadScene(1);
+            }
+            foreach(PlayerInfo player in Client.instance.players)
+            {
+                if (player.playerId == _client)
                 {
+                    if (player.team == 0)
+                    {
+                        Client.instance.count1--;
+                    }
+                    else
+                    {
+                        Client.instance.count2--;
+                    }
                     Client.instance.players.Remove(player);
                     break;
                 }
             }
+            Debug.Log("Hello");
+            InRoomManager.instance.ListingPlayer(Client.instance.players);
         }
         catch (Exception ex)
         {
@@ -186,11 +215,11 @@ public class PacketHandler
     {
         try
         {
-
+            SceneManager.LoadScene(4);
         }
-        catch
+        catch (Exception ex)
         {
-
+            Debug.Log(ex);
         }
     }
     //sTankPosition,
@@ -218,10 +247,22 @@ public class PacketHandler
         {
             //TODO: host out
             int _client = packet.ReadInt();
+            if (_client == Client.instance.hostId)
+            {
+                SceneManager.LoadScene(1);
+            }
             foreach(PlayerInfo player in Client.instance.players)
             {
                 if (player.playerId == _client)
                 {
+                    if (player.team == 0)
+                    {
+                        Client.instance.count1--;
+                    }
+                    else
+                    {
+                        Client.instance.count2--;
+                    }
                     Client.instance.players.Remove(player);
                     break;
                 }

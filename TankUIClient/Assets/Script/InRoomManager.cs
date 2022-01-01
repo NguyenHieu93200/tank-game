@@ -63,7 +63,33 @@ public class InRoomManager : MonoBehaviour
 
     public void Back()
     {
-        //TODO: out room
         SceneManager.LoadScene(1);
+        PacketSender.LeaveRoomSender(Client.instance.id, Client.instance.roomId);
+    }
+
+    public void Swap()
+    {
+        if (Client.instance.team == 0)
+        {
+            if (Client.instance.count2 < 2)
+            {
+                PacketSender.InfoChangeSender(Client.instance.id, Client.instance.roomId, 1, 1);
+                return;
+            }
+        } 
+        else
+        {
+            if ( Client.instance.count1 < 2 )
+            {
+                PacketSender.InfoChangeSender(Client.instance.id, Client.instance.roomId, 0, 1);
+                return;
+            }
+        }
+        //TODO: error handler
+    } 
+
+    public void StartGame()
+    {
+        PacketSender.StartGameSender(Client.instance.roomId);
     }
 }
