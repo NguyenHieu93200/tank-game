@@ -1,6 +1,10 @@
-﻿namespace TankClient
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace TankClient
 {
-    internal class PacketSender
+    public class PacketSender
     {
         //cConnect = 1,
         public static void ConnectSender(string username)
@@ -58,7 +62,7 @@
         //cStartGame,
         public static void StartGameSender(int _roomid)
         {
-            Packet packet = new(0x00, (byte)ClientPackets.cStartGame);
+            Packet packet = new Packet(0x00, (byte)ClientPackets.cStartGame);
             packet.Write(_roomid);
             Client.instance.tcp.SendData(packet);
         }
@@ -66,7 +70,7 @@
         //cTankMove
         public static void TankMoveSender(int _clientid, int _roomid, float _x, float _y, float _angle)
         {
-            Packet packet = new(0x00, (byte)ClientPackets.cTankMove);
+            Packet packet = new Packet(0x00, (byte)ClientPackets.cTankMove);
             packet.Write(_clientid);
             packet.Write(_roomid);
             packet.Write(_x);
@@ -78,7 +82,7 @@
         //cTankShoot,
         public static void TankShootSender(int _clientid, int _roomid, float _x, float _y, float _angle)
         {
-            Packet packet = new(0x00, (byte)ClientPackets.cTankShoot);
+            Packet packet = new Packet(0x00, (byte)ClientPackets.cTankShoot);
             packet.Write(_clientid);
             packet.Write(_roomid);
             packet.Write(_x);
@@ -90,7 +94,7 @@
         //cTankSpecial,
         public static void TankSpecialSender(int _clientid, int _roomid, float _x, float _y, float _angle)
         {
-            Packet packet = new(0x00, (byte)ClientPackets.cTankSpecial);
+            Packet packet = new Packet(0x00, (byte)ClientPackets.cTankSpecial);
             packet.Write(_clientid);
             packet.Write(_roomid);
             packet.Write(_x);
@@ -102,7 +106,7 @@
         //cTankHealth,
         public static void TankHealthSender(int _clientid, int _roomid, int _health)
         {
-            Packet packet = new(0x00, (byte)ClientPackets.cTankHealth);
+            Packet packet = new Packet(0x00, (byte)ClientPackets.cTankHealth);
             packet.Write(_clientid);
             packet.Write(_roomid);
             packet.Write(_health);
@@ -112,7 +116,7 @@
         //cTankDeath,
         public static void TankDeathSender(int _clientid, int _roomid)
         {
-            Packet packet = new(0x00, (byte)ClientPackets.cTankDeath);
+            Packet packet = new Packet(0x00, (byte)ClientPackets.cTankDeath);
             packet.Write(_clientid);
             packet.Write(_roomid);
             Client.instance.tcp.SendData(packet);
@@ -121,7 +125,7 @@
         //cWinRound,
         public static void WinRoundSender(int _roomid, byte _teamid)
         {
-            Packet packet = new(0x00, (byte)ClientPackets.cWinRound);
+            Packet packet = new Packet(0x00, (byte)ClientPackets.cWinRound);
             packet.Write(_roomid);
             packet.Write(_teamid);
             Client.instance.tcp.SendData(packet);
@@ -130,7 +134,7 @@
         //cWinGame,
         public static void WinGameSender(int _roomid, byte _teamid)
         {
-            Packet packet = new(0x00, (byte)ClientPackets.cWinGame);
+            Packet packet = new Packet(0x00, (byte)ClientPackets.cWinGame);
             packet.Write(_roomid);
             packet.Write(_teamid);
             Client.instance.tcp.SendData(packet);
@@ -145,17 +149,5 @@
             Client.instance.tcp.SendData(packet);
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
 }

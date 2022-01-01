@@ -156,12 +156,17 @@ namespace TankServer
         }
 
         //sDisconnect
-        public static void DisconnectSender(Packet packet, int _roomId)
+        public static void DisconnectSender(int _clientid, int _roomId)
         {
-            packet.OverwriteHeader(0x01, (byte)ServerPackets.sDisconnect);
+            Packet packet = new Packet(0x01, (byte)ServerPackets.sDisconnect);
+            packet.Write(_clientid);
+            packet.Write(_roomId);
             foreach (Client _client in Server.rooms[_roomId].GetClient())
             {
-                _client.tcp.SendData(packet);
+                if (_client.id != _clientid)
+                {
+                    _client.tcp.SendData(packet);
+                }
             }
         }
 

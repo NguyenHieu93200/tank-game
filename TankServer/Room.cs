@@ -71,7 +71,7 @@ namespace TankServer
 
         public void RemoveClient(Client _client)
         {
-            if (GetClient().Count == 1)
+            if (GetClient().Count == 1 || _client.id == hostId)
             {
                 CloseRoom();
                 return;

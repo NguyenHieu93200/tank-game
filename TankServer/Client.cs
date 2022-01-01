@@ -103,7 +103,8 @@ namespace TankServer
         public void Disconnect()
         {
             if (roomId != 0)
-            {
+            {   
+                ServerSender.DisconnectSender(id, roomId);
                 Server.rooms[roomId].RemoveClient(Server.clients[id]);
             }
             Console.WriteLine($"{tcp.socket.Client.RemoteEndPoint} has disconnected.");
