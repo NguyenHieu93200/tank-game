@@ -92,7 +92,7 @@ public class PacketHandler
     private static void ErrorHandler(Packet packet)
     {
         Debug.Log($"Error: {packet.ReadString()}");
-        Client.instance.Disconnect();
+        SceneManager.LoadScene(1);
     }
 
     //sRoomInfo,

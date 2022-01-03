@@ -40,7 +40,10 @@ public class RoomListing : MonoBehaviour
             if (listing != null) listing.SetRoomInfo(info);
         }
     }
-
+    private void Update()
+    {
+        //TODO: auto reload
+    }
     public void Refresh()
     {
         SceneManager.LoadScene(2);
