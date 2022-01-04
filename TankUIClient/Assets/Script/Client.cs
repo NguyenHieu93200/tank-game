@@ -12,7 +12,10 @@ public class Client : MonoBehaviour
     public const int DataBufferSize = 4096;
     public readonly int port = 8000;
     public string ip = "127.0.0.1";
+
     public TCP tcp;
+    public UDP udp;
+
     public int id;
     public string username;
 
@@ -53,6 +56,7 @@ public class Client : MonoBehaviour
         ip = _ip;
         username = _username;
         tcp = new TCP(ip, port);
+        udp = new UDP();
         tcp.Connect();
         PacketSender.ConnectSender(username);
     }
@@ -155,12 +159,82 @@ public class Client : MonoBehaviour
         }
     }
 
+    public class UDP
+    {
+        public UdpClient socket;
+        public IPEndPoint endPoint;
+
+        public UDP()
+        {
+            endPoint = new IPEndPoint(IPAddress.Parse(instance.ip), instance.port);
+        }
+
+        public void Connect(int _localPort)
+        {
+            socket = new UdpClient(_localPort);
+
+            socket.Connect(endPoint);
+            socket.BeginReceive(ReceiveCallback, null);
+
+            Packet _packet = new Packet();
+            
+            SendData(_packet);
+        }
+
+        public void SendData(Packet _packet)
+        {
+            try
+            {
+                if (socket != null)
+                {
+                    socket.BeginSend(_packet.ToArray(), _packet.ToArray().Length, null, null);
+                }
+            }
+            catch (Exception _ex)
+            {
+                Debug.Log($"Error sending data to server via UDP: {_ex}");
+            }
+        }
+
+        private void ReceiveCallback(IAsyncResult _result)
+        {
+            try
+            {
+                byte[] _data = socket.EndReceive(_result, ref endPoint);
+                socket.BeginReceive(ReceiveCallback, null);
+
+                if (_data.Length <= 0)
+                {
+                    instance.Disconnect();
+                    return;
+                }
+
+                ThreadManager.ExecuteOnMainThread(() =>
+                {
+                    PacketHandler.Handle(_data);
+                });
+            }
+            catch (Exception)
+            {
+                //Disconnect();
+            }
+        }
+        public void Disconnect()
+        {
+            instance.Disconnect();
+
+            endPoint = null;
+            socket = null;
+        }
+    }
+
     public void Disconnect()
     {
         if (tcp != null)
         {
             tcp.Disconnect();
         }
+        udp.Disconnect();
         instance = null;
         Debug.Log("Disconnected.");
     }
