@@ -130,8 +130,15 @@ public class PacketHandler
                 }
 
             }
-
-            InRoomManager.instance.ListingPlayer(Client.instance.players);
+            
+            while(true)
+            {
+                if (SceneManager.GetSceneByBuildIndex(3).isLoaded)
+                {
+                    InRoomManager.instance.ListingPlayer(Client.instance.players);
+                    break;
+                }
+            }
         }
         catch (Exception ex)
         {
@@ -202,6 +209,7 @@ public class PacketHandler
                 }
             }
             Debug.Log("Hello");
+
             InRoomManager.instance.ListingPlayer(Client.instance.players);
         }
         catch (Exception ex)
@@ -229,14 +237,19 @@ public class PacketHandler
         {
             int _clientid = packet.ReadInt();
             int _roomid = packet.ReadInt();
-            float _x = packet.ReadFloat();
-            float _z = packet.ReadFloat();
-            float _angle = packet.ReadFloat();
+            if (Client.instance.id != _clientid){
+                float _x = packet.ReadFloat();
+                float _z = packet.ReadFloat();
+                float _angley = packet.ReadFloat();
+                float _anglew = packet.ReadFloat();
 
-            PlayerManager tank = GameManager.instance.m_Tanks[_clientid];
-            Rigidbody body = tank.GetComponent<Rigidbody>();
-            body.MovePosition(new Vector3(_x, 0, _z));
-            body.MoveRotation(new Quaternion(0f, _angle, 0f, body.rotation.w));
+                PlayerManager tank = GameManager.instance.m_Tanks[_clientid];
+                Rigidbody body = tank.GetComponent<Rigidbody>();
+
+                body.MovePosition(new Vector3(_x, 0, _z));
+
+                body.MoveRotation(new Quaternion(0f, _angley, 0f, _anglew));
+            }
         }
         catch (Exception ex)
         {

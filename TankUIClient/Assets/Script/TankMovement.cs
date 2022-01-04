@@ -111,10 +111,10 @@ namespace Complete
         private void FixedUpdate ()
         {
             // Adjust the rigidbodies position and orientation in FixedUpdate.
-            float x, z, angle;
+            float x, z, angley, anglew;
             Move (out x, out z);
-            angle = Turn ();
-            PacketSender.TankMoveSender(Client.instance.id, Client.instance.roomId, x, z, angle);
+            Turn (out angley, out anglew);
+            PacketSender.TankMoveSender(Client.instance.id, Client.instance.roomId, x, z, angley, anglew);
         }
 
 
@@ -125,14 +125,13 @@ namespace Complete
 
             // Apply this movement to the rigidbody's position.
 
-            //m_Rigidbody.MovePosition(m_Rigidbody.position + movement);
-            Vector3 temp = m_Rigidbody.position + movement;
-            x = temp.x;
-            z = temp.z;
+            m_Rigidbody.MovePosition(m_Rigidbody.position + movement);
+            x = m_Rigidbody.position.x;
+            z = m_Rigidbody.position.z;
         }
 
 
-        private float Turn()
+        private void Turn(out float angley, out float anglew)
         {
             // Determine the number of degrees to be turned based on the input, speed and time between frames.
             float turn = m_TurnInputValue * m_TurnSpeed * Time.deltaTime;
@@ -141,11 +140,10 @@ namespace Complete
             Quaternion turnRotation = Quaternion.Euler(0f, turn, 0f);
 
             // Apply this rotation to the rigidbody's rotation.
-            //m_Rigidbody.MoveRotation(m_Rigidbody.rotation * turnRotation);
+            m_Rigidbody.MoveRotation(m_Rigidbody.rotation * turnRotation);
             
-            Quaternion temp = m_Rigidbody.rotation * turnRotation;
-
-            return temp.y;
+            angley = m_Rigidbody.rotation.y;
+            anglew = m_Rigidbody.rotation.w;
         }
     }
 }

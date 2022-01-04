@@ -37,13 +37,19 @@ public class InRoomManager : MonoBehaviour
 
     public void ListingPlayer(List<PlayerInfo> players)
     {
-        foreach (Transform child in _panel1)
+        if (_panel1 != null)
         {
-            Destroy(child.gameObject);
+            foreach (Transform child in _panel1)
+            {
+                Destroy(child.gameObject);
+            }
         }
-        foreach (Transform child in _panel2)
+        if (_panel2 != null)
         {
-            Destroy(child.gameObject);
+            foreach (Transform child in _panel2)
+            {
+                Destroy(child.gameObject);
+            }
         }
         foreach (PlayerInfo info in players)
         {
