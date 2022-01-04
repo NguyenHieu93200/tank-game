@@ -82,6 +82,7 @@ namespace TankServer
                 {
                     // If this is a new connection
                     clients[_clientId].udp.Connect(_clientEndPoint);
+                    return;
                 }
 
                 if (clients[_clientId].udp.endPoint.ToString() == _clientEndPoint.ToString())

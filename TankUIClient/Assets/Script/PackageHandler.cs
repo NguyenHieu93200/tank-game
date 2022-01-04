@@ -4,6 +4,7 @@ using System.Text;
 using UnityEngine;
 using TankClient;
 using UnityEngine.SceneManagement;
+using System.Net;
 
 public class PacketHandler
 {
@@ -80,6 +81,7 @@ public class PacketHandler
         {
             Client.instance.id = packet.ReadInt();
             Debug.Log($"Receive id: {Client.instance.id} from server.");
+            Client.instance.udp.Connect(((IPEndPoint)Client.instance.tcp.socket.Client.LocalEndPoint).Port);
         }
         catch (Exception ex)
         {
