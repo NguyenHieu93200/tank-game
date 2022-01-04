@@ -235,8 +235,8 @@ public class PacketHandler
 
             PlayerManager tank = GameManager.instance.m_Tanks[_clientid];
             Rigidbody body = tank.GetComponent<Rigidbody>();
-            body.MovePosition(body.position + new Vector3(_x, 0, _z));
-            body.MoveRotation(body.rotation * Quaternion.Euler(0f, _angle, 0f));
+            body.MovePosition(new Vector3(_x, 0, _z));
+            body.MoveRotation(new Quaternion(0f, _angle, 0f, body.rotation.w));
         }
         catch (Exception ex)
         {
