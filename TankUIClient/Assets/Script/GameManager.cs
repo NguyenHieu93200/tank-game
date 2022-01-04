@@ -90,6 +90,7 @@ public class GameManager : MonoBehaviour
             PlayerManager tankManager = tank.GetComponent<PlayerManager>();
             tankManager.m_Instance = tank;
             tankManager.m_PlayerNumber = player.playerId;
+            tankManager.teamid = player.team;
             m_Tanks.Add(player.playerId, tankManager);
             m_Tanks[player.playerId].Setup();
         }

@@ -34,10 +34,10 @@ public class PacketHandler
             case (byte)ServerPackets.sGameStart:
                 GameStartHandler(packet);
                 break;
-            ////sTankPosition,
-            //case (byte)ServerPackets.sTankPosition:
-            //    TankPositionHandler(packet);
-            //    break;
+            //sTankPosition,
+            case (byte)ServerPackets.sTankPosition:
+                TankPositionHandler(packet);
+                break;
             ////sTankShoot,
             //case (byte)ServerPackets.sTankShoot:
             //    TankShootHandler(packet);
@@ -227,11 +227,20 @@ public class PacketHandler
     {
         try
         {
+            int _clientid = packet.ReadInt();
+            int _roomid = packet.ReadInt();
+            float _x = packet.ReadFloat();
+            float _z = packet.ReadFloat();
+            float _angle = packet.ReadFloat();
 
+            PlayerManager tank = GameManager.instance.m_Tanks[_clientid];
+            Rigidbody body = tank.GetComponent<Rigidbody>();
+            body.MovePosition(body.position + new Vector3(_x, 0, _z));
+            body.MoveRotation(body.rotation * Quaternion.Euler(0f, _angle, 0f));
         }
-        catch
+        catch (Exception ex)
         {
-
+            Debug.Log(ex);
         }
     }
     //sTankShoot,

@@ -6,8 +6,11 @@ public class PlayerManager : MonoBehaviour
 {
     private Rigidbody m_Rigidbody;              // Reference used to move the tank.
     // Start is called before the first frame update
-    public Color m_PlayerColor;                             // This is the color this tank will be tinted.
+    public Color m_Team1Color;                             // This is the color this tank will be tinted.
+    public Color m_Team2Color;
+
     [HideInInspector] public int m_PlayerNumber;            // This specifies which player this the manager for.
+    [HideInInspector] public byte teamid;
     
     [HideInInspector] public GameObject m_Instance;         // A reference to the instance of the tank when it is created.
     [HideInInspector] public int m_Wins;                    // The number of wins this player has so far.
@@ -28,7 +31,14 @@ public class PlayerManager : MonoBehaviour
         for (int i = 0; i < renderers.Length; i++)
         {
             // ... set their material color to the color specific to this tank.
-            renderers[i].material.color = m_PlayerColor;
+            if (teamid == 0)
+            {
+                renderers[i].material.color = m_Team1Color;
+            } else
+            {
+                renderers[i].material.color = m_Team2Color;
+            }
+            
         }
     }
 

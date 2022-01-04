@@ -5006,6 +5006,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 135d538766ee1b64593eaa45d99b6e37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_Team1Color: {r: 1, g: 0.3915094, b: 0.6945616, a: 0}
+  m_Team2Color: {r: 0.2663314, g: 0.34585503, b: 0.990566, a: 0}
+  m_PlayerNumber: 0
+  teamid: 0
+  m_Instance: {fileID: 0}
+  m_Wins: 0
 --- !u!1 &3717280257474137847
 GameObject:
   m_ObjectHideFlags: 0
