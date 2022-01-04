@@ -71,6 +71,8 @@ namespace TankServer
                 }
 
                 Packet _packet = new Packet(_data);
+                _packet.ReadByte();
+                _packet.ReadByte();
                 int _clientId = _packet.ReadInt();
 
                 if (_clientId == 0)

@@ -176,8 +176,8 @@ public class Client : MonoBehaviour
             socket.Connect(endPoint);
             socket.BeginReceive(ReceiveCallback, null);
 
-            Packet _packet = new Packet();
-            
+            Packet _packet = new Packet(0x00, 0x00);
+            _packet.Write(instance.id);
             SendData(_packet);
         }
 
