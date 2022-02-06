@@ -14,6 +14,7 @@ namespace TankServer
         public static Dictionary<int, Room> rooms = new();
 
         private static TcpListener tcpListener = null;
+        private static UdpClient udpListener = null;
 
         public static void Start(int _maxPlayers, int _maxRooms, int _port)
         {
@@ -26,6 +27,10 @@ namespace TankServer
             InitializeServerData();
 
             tcpListener = new TcpListener(localaddr: IPAddress.Any, port: Port);
+
+            udpListener = new UdpClient(Port);
+            udpListener.BeginReceive(UDPReceiveCallback, null);
+
             tcpListener.Start();
             tcpListener.BeginAcceptTcpClient(callback: TcpClientAcceptCallback, state: null);
 
@@ -50,6 +55,63 @@ namespace TankServer
 
             Console.WriteLine($"{_client.Client.RemoteEndPoint} failed to connect: Server full!");
             _client.Close();
+        }
+
+        private static void UDPReceiveCallback(IAsyncResult _result)
+        {
+            try
+            {
+                IPEndPoint _clientEndPoint = new IPEndPoint(IPAddress.Any, 0);
+                byte[] _data = udpListener.EndReceive(_result, ref _clientEndPoint);
+                udpListener.BeginReceive(UDPReceiveCallback, null);
+
+                if (_data.Length <= 0)
+                {
+                    return;
+                }
+
+                Packet _packet = new Packet(_data);
+                _packet.ReadByte();
+                _packet.ReadByte();
+                int _clientId = _packet.ReadInt();
+
+                if (_clientId == 0)
+                {
+                    return;
+                }
+
+                if (clients[_clientId].udp.endPoint == null)
+                {
+                    // If this is a new connection
+                    clients[_clientId].udp.Connect(_clientEndPoint);
+                    return;
+                }
+
+                if (clients[_clientId].udp.endPoint.ToString() == _clientEndPoint.ToString())
+                {
+                    // Ensures that the client is not being impersonated by another by sending a false clientID
+                    clients[_clientId].udp.HandleData(_packet);
+                }
+            }
+            catch (Exception _ex)
+            {
+                Console.WriteLine($"Error receiving UDP data: {_ex}");
+            }
+        }
+
+        public static void SendUDPData(IPEndPoint _clientEndPoint, Packet _packet)
+        {
+            try
+            {
+                if (_clientEndPoint != null)
+                {
+                    udpListener.BeginSend(_packet.ToArray(), _packet.ToArray().Length, _clientEndPoint, null, null);
+                }
+            }
+            catch (Exception _ex)
+            {
+                Console.WriteLine($"Error sending data to {_clientEndPoint} via UDP: {_ex}");
+            }
         }
 
         private static void InitializeServerData()

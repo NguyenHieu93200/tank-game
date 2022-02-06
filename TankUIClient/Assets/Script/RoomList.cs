@@ -24,8 +24,9 @@ public class RoomList : MonoBehaviour, IPointerDownHandler
 
     public void OnPointerDown(PointerEventData data)
     {
+        Client.instance.roomId = int.Parse(_roomId.text);
         SceneManager.LoadScene(3);
-        PacketSender.JoinRoomSender(Client.instance.id, int.Parse(_roomId.text));
+        PacketSender.JoinRoomSender(Client.instance.id, Client.instance.roomId);
         Debug.Log($"You press {_roomId.text} button.");
     }
 

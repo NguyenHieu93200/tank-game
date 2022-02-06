@@ -16,7 +16,7 @@ public class InRoomManager : MonoBehaviour
     public PlayerList _playerListing;
 
     public Text RoomName;
-
+    public GameObject StartButton;
     private void Start()
     {
         RoomName.text = Client.instance.roomName;
@@ -37,13 +37,19 @@ public class InRoomManager : MonoBehaviour
 
     public void ListingPlayer(List<PlayerInfo> players)
     {
-        foreach (Transform child in _panel1)
+        if (_panel1 != null)
         {
-            Destroy(child.gameObject);
+            foreach (Transform child in _panel1)
+            {
+                Destroy(child.gameObject);
+            }
         }
-        foreach (Transform child in _panel2)
+        if (_panel2 != null)
         {
-            Destroy(child.gameObject);
+            foreach (Transform child in _panel2)
+            {
+                Destroy(child.gameObject);
+            }
         }
         foreach (PlayerInfo info in players)
         {
@@ -58,6 +64,15 @@ public class InRoomManager : MonoBehaviour
                 listing = (PlayerList)Instantiate(_playerListing, _panel2);
             }
             if (listing != null) listing.SetPlayerInfo(info);
+        }
+        StartButton.SetActive(true);
+        if (Client.instance.id != Client.instance.hostId)
+        {
+            StartButton.SetActive(false);
+        }
+        if (Client.instance.count1 == 0 || Client.instance.count2 == 0)
+        {
+            StartButton.SetActive(false);
         }
     }
 

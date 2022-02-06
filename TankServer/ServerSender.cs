@@ -91,7 +91,7 @@ namespace TankServer
             packet.OverwriteHeader(0x01, (byte)ServerPackets.sTankPosition);
             foreach (Client _client in Server.rooms[_roomId].GetClient())
             {
-                _client.tcp.SendData(packet);
+                _client.udp.SendData(packet);
             }
         }
 

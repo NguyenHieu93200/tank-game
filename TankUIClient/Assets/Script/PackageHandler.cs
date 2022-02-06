@@ -4,6 +4,7 @@ using System.Text;
 using UnityEngine;
 using TankClient;
 using UnityEngine.SceneManagement;
+using System.Net;
 
 public class PacketHandler
 {
@@ -34,10 +35,10 @@ public class PacketHandler
             case (byte)ServerPackets.sGameStart:
                 GameStartHandler(packet);
                 break;
-            ////sTankPosition,
-            //case (byte)ServerPackets.sTankPosition:
-            //    TankPositionHandler(packet);
-            //    break;
+            //sTankPosition,
+            case (byte)ServerPackets.sTankPosition:
+                TankPositionHandler(packet);
+                break;
             ////sTankShoot,
             //case (byte)ServerPackets.sTankShoot:
             //    TankShootHandler(packet);
@@ -80,6 +81,7 @@ public class PacketHandler
         {
             Client.instance.id = packet.ReadInt();
             Debug.Log($"Receive id: {Client.instance.id} from server.");
+            Client.instance.udp.Connect(((IPEndPoint)Client.instance.tcp.socket.Client.LocalEndPoint).Port);
         }
         catch (Exception ex)
         {
@@ -92,7 +94,7 @@ public class PacketHandler
     private static void ErrorHandler(Packet packet)
     {
         Debug.Log($"Error: {packet.ReadString()}");
-        Client.instance.Disconnect();
+        SceneManager.LoadScene(1);
     }
 
     //sRoomInfo,
@@ -130,8 +132,15 @@ public class PacketHandler
                 }
 
             }
-
-            InRoomManager.instance.ListingPlayer(Client.instance.players);
+            
+            while(true)
+            {
+                if (SceneManager.GetSceneByBuildIndex(3).isLoaded)
+                {
+                    InRoomManager.instance.ListingPlayer(Client.instance.players);
+                    break;
+                }
+            }
         }
         catch (Exception ex)
         {
@@ -202,6 +211,7 @@ public class PacketHandler
                 }
             }
             Debug.Log("Hello");
+
             InRoomManager.instance.ListingPlayer(Client.instance.players);
         }
         catch (Exception ex)
@@ -227,11 +237,25 @@ public class PacketHandler
     {
         try
         {
+            int _clientid = packet.ReadInt();
+            int _roomid = packet.ReadInt();
+            if (Client.instance.id != _clientid){
+                float _x = packet.ReadFloat();
+                float _z = packet.ReadFloat();
+                float _angley = packet.ReadFloat();
+                float _anglew = packet.ReadFloat();
 
+                PlayerManager tank = GameManager.instance.m_Tanks[_clientid];
+                Rigidbody body = tank.GetComponent<Rigidbody>();
+
+                body.MovePosition(new Vector3(_x, 0, _z));
+
+                body.MoveRotation(new Quaternion(0f, _angley, 0f, _anglew));
+            }
         }
-        catch
+        catch (Exception ex)
         {
-
+            Debug.Log(ex);
         }
     }
     //sTankShoot,

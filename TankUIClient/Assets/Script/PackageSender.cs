@@ -68,38 +68,41 @@ namespace TankClient
         }
 
         //cTankMove
-        public static void TankMoveSender(int _clientid, int _roomid, float _x, float _y, float _angle)
+        public static void TankMoveSender(int _clientid, int _roomid, float _x, float _z, float _angley, float _anglew)
         {
             Packet packet = new Packet(0x00, (byte)ClientPackets.cTankMove);
             packet.Write(_clientid);
             packet.Write(_roomid);
             packet.Write(_x);
-            packet.Write(_y);
-            packet.Write(_angle);
-            Client.instance.tcp.SendData(packet);
+            packet.Write(_z);
+            packet.Write(_angley);
+            packet.Write(_anglew);
+            Client.instance.udp.SendData(packet);
         }
 
         //cTankShoot,
-        public static void TankShootSender(int _clientid, int _roomid, float _x, float _y, float _angle)
+        public static void TankShootSender(int _clientid, int _roomid, float _x, float _z, float _angley, float _anglew)
         {
             Packet packet = new Packet(0x00, (byte)ClientPackets.cTankShoot);
             packet.Write(_clientid);
             packet.Write(_roomid);
             packet.Write(_x);
-            packet.Write(_y);
-            packet.Write(_angle);
+            packet.Write(_z);
+            packet.Write(_angley);
+            packet.Write(_anglew);
             Client.instance.tcp.SendData(packet);
         }
 
         //cTankSpecial,
-        public static void TankSpecialSender(int _clientid, int _roomid, float _x, float _y, float _angle)
+        public static void TankSpecialSender(int _clientid, int _roomid, float _x, float _z, float _angley, float _anglew)
         {
             Packet packet = new Packet(0x00, (byte)ClientPackets.cTankSpecial);
             packet.Write(_clientid);
             packet.Write(_roomid);
             packet.Write(_x);
-            packet.Write(_y);
-            packet.Write(_angle);
+            packet.Write(_z);
+            packet.Write(_angley);
+            packet.Write(_anglew);
             Client.instance.tcp.SendData(packet);
         }
 

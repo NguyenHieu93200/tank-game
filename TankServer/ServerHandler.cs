@@ -115,7 +115,7 @@ namespace TankServer
         {
             int _client = packet.ReadInt();
             int _roomId = packet.ReadInt();
-            if (Server.rooms[_roomId].GetClient().Count < Room.MaxPlayersPerTeam * 2)
+            if (Server.rooms[_roomId]!=null && Server.rooms[_roomId].GetClient().Count < Room.MaxPlayersPerTeam * 2)
             {
                 Server.rooms[_roomId].AddClient(Server.clients[_client]);
                 ServerSender.RoomInfoSender(_client, _roomId, _toAll: true);
