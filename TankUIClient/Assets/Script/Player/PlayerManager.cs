@@ -18,7 +18,7 @@ public class PlayerManager : MonoBehaviour
     public Rigidbody m_Shell;                   // Prefab of the shell.
     public Transform m_FireTransform;           // A child of the tank where the shells are spawned.
 
-    public float m_LaunchForce = 35f;         // The force that will be given to the shell when the fire button is released.
+    public float m_LaunchForce = 50f;         // The force that will be given to the shell when the fire button is released.
 
 
     private GameObject m_CanvasGameObject;                  // Used to disable the world space UI during the Starting and Ending phases of each round.

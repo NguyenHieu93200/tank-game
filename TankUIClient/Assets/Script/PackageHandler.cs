@@ -296,6 +296,9 @@ public class PacketHandler
             int _client = packet.ReadInt();
             int _roomId = packet.ReadInt();
             float _heath = packet.ReadFloat();
+
+            PlayerManager tank = GameManager.instance.m_Tanks[_client];
+            tank.HEALTH = _heath;
         }
         catch
         {

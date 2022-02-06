@@ -177,8 +177,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ec795cac4e99bf48b993be34a935e2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Speed: 12
-  m_TurnSpeed: 180
+  m_Speed: 10
+  m_TurnSpeed: 120
 --- !u!114 &1154950142741599088
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -201,7 +201,7 @@ MonoBehaviour:
   m_Wins: 0
   m_Shell: {fileID: 5409530, guid: 008ecb1b70bec724fa2cd34255b0d8f8, type: 3}
   m_FireTransform: {fileID: 3307225660362541559}
-  m_LaunchForce: 35
+  m_LaunchForce: 50
 --- !u!1 &2780041148905700
 GameObject:
   m_ObjectHideFlags: 0

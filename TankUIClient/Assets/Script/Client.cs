@@ -216,13 +216,11 @@ public class Client : MonoBehaviour
             }
             catch (Exception)
             {
-                //Disconnect();
+                instance.Disconnect();
             }
         }
         public void Disconnect()
         {
-            instance.Disconnect();
-
             endPoint = null;
             socket = null;
         }
@@ -233,8 +231,10 @@ public class Client : MonoBehaviour
         if (tcp != null)
         {
             tcp.Disconnect();
+        } 
+        if (udp != null) { 
+            udp.Disconnect(); 
         }
-        udp.Disconnect();
         instance = null;
         Debug.Log("Disconnected.");
     }
