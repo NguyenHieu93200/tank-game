@@ -148,13 +148,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2780041148905698}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0c65ce5fd7cabd48b72661649771d11, type: 3}
+  m_Script: {fileID: 11500000, guid: d97b7627fc2b8da448cff015e883308e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_PlayerNumber: 1
-  m_Shell: {fileID: 5409530, guid: 008ecb1b70bec724fa2cd34255b0d8f8, type: 3}
-  m_FireTransform: {fileID: 3307225660362541559}
-  m_LaunchForce: 35
+  m_BaseAttackTime: 1
 --- !u!65 &2780041148905697
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -202,6 +199,9 @@ MonoBehaviour:
   teamid: 0
   m_Instance: {fileID: 0}
   m_Wins: 0
+  m_Shell: {fileID: 5409530, guid: 008ecb1b70bec724fa2cd34255b0d8f8, type: 3}
+  m_FireTransform: {fileID: 3307225660362541559}
+  m_LaunchForce: 35
 --- !u!1 &2780041148905700
 GameObject:
   m_ObjectHideFlags: 0
