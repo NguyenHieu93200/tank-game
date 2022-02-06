@@ -8,9 +8,10 @@ public class PlayerManager : MonoBehaviour
     // Start is called before the first frame update
     public Color m_Team1Color;                             // This is the color this tank will be tinted.
     public Color m_Team2Color;
-
-    [HideInInspector] public int m_PlayerNumber;            // This specifies which player this the manager for.
-    [HideInInspector] public byte teamid;
+    public float MAX_HEALTH = 100f;
+    public float HEALTH;
+    public int m_PlayerNumber;            // This specifies which player this the manager for.
+    public byte teamid;
     
     [HideInInspector] public GameObject m_Instance;         // A reference to the instance of the tank when it is created.
     [HideInInspector] public int m_Wins;                    // The number of wins this player has so far.
@@ -21,6 +22,7 @@ public class PlayerManager : MonoBehaviour
     {
         m_Rigidbody = GetComponent<Rigidbody>();
         m_Rigidbody.maxDepenetrationVelocity = float.PositiveInfinity;
+        this.HEALTH = MAX_HEALTH;
     }
     public void Setup()
     {

@@ -48,9 +48,9 @@ public class PacketHandler
             //    TankSpecialHandler(packet);
             //    break;
             ////sTankHealth,
-            //case (byte)ServerPackets.sTankHealth:
-            //    TankHealthHandler(packet);
-            //    break;
+            case (byte)ServerPackets.sTankHealth:
+                TankHealthHandler(packet);
+                break;
             ////sTankDeath,
             //case (byte)ServerPackets.sTankDeath:
             //    TankDeathHandler(packet);
@@ -261,6 +261,10 @@ public class PacketHandler
     //sTankShoot,
     //sTankSpecial,
     //sTankHealth,
+        private static void TankHealthHandler(Packet packet)
+        {
+            Debug.Log("Someone hit");
+        }
     //sTankDeath,
     //sWinRound,
     //sWinGame,

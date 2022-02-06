@@ -5,7 +5,7 @@ namespace Complete
 {
     public class TankMovement : MonoBehaviour
     {
-        public float m_Speed = 12f;                 // How fast the tank moves forward and back.
+        public float m_Speed = 10f;                 // How fast the tank moves forward and back.
         public float m_TurnSpeed = 180f;            // How fast the tank turns in degrees per second.
         //public AudioSource m_MovementAudio;         // Reference to the audio source used to play engine sounds. NB: different to the shooting audio source.
         //public AudioClip m_EngineIdling;            // Audio to play when the tank isn't moving.
