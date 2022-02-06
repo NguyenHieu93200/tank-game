@@ -201,7 +201,7 @@ MonoBehaviour:
   m_Wins: 0
   m_Shell: {fileID: 5409530, guid: 008ecb1b70bec724fa2cd34255b0d8f8, type: 3}
   m_FireTransform: {fileID: 3307225660362541559}
-  m_LaunchForce: 50
+  m_LaunchForce: 40
 --- !u!1 &2780041148905700
 GameObject:
   m_ObjectHideFlags: 0
