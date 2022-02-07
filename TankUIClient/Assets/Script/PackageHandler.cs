@@ -338,7 +338,7 @@ public class PacketHandler
         int _team = packet.ReadByte();
         Debug.Log($"Winner: {_team}");
 
-        GameManager.Reset();
+        GameManager.instance.Reset();
 
 
     }    

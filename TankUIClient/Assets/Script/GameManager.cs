@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour
     private int m_RoundWinner;
     private int m_GameWinner;
     private Transform m_SpawmPoint1;
-    public Camera DeathCamera;
+    public GameObject DeathCamera;
 
 
 
@@ -81,6 +81,7 @@ public class GameManager : MonoBehaviour
             if (player.playerId == Client.instance.id)
             {
                 tank = Instantiate(m_LocalTankPrefab, SpawnPoint.position, SpawnPoint.rotation);
+
             }
             else
             {
@@ -92,6 +93,7 @@ public class GameManager : MonoBehaviour
             tankManager.m_PlayerNumber = player.playerId;
             tankManager.teamid = player.team;
             tankManager.m_Dead = false;
+            tankManager.SpawnPoint = SpawnPoint; // add spawn point
             m_Tanks.Add(player.playerId, tankManager);
             m_Tanks[player.playerId].Setup();
         }
@@ -145,7 +147,14 @@ public class GameManager : MonoBehaviour
 
     public void Reset()
     {
-    DeathCamera.setActive(false);
+        foreach(PlayerManager tank in m_Tanks.Values)
+        {
+           Destroy(tank.m_Instance);
+        }
+        m_Tanks.Clear();
+        SpawnAllTanks();
+
+        DeathCamera.SetActive(false);
     }
 
 }

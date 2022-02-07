@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class PlayerManager : MonoBehaviour
 {
     private Rigidbody m_Rigidbody;              // Reference used to move the tank.
@@ -12,7 +12,8 @@ public class PlayerManager : MonoBehaviour
     public float HEALTH;
     public int m_PlayerNumber;            // This specifies which player this the manager for.
     public byte teamid;
-    public Tranform SpawnPoint;
+
+    public Transform SpawnPoint;
 
     [HideInInspector] public GameObject m_Instance;         // A reference to the instance of the tank when it is created.
     [HideInInspector] public int m_Wins;                    // The number of wins this player has so far.
@@ -124,9 +125,8 @@ public class PlayerManager : MonoBehaviour
 
         public void Reset ()
         {
-        m_Instance.transform.position = m_SpawnPoint.position;
-        m_Instance.transform.rotation = m_SpawnPoint.rotation;
-
+        m_Instance.transform.position = SpawnPoint.position;
+        m_Instance.transform.rotation = SpawnPoint.rotation;
         m_Instance.SetActive (false);
         m_Instance.SetActive (true);
     }
