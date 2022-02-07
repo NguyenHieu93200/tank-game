@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 38005391}
   - component: {fileID: 38005390}
   - component: {fileID: 38005389}
+  - component: {fileID: 38005392}
   m_Layer: 0
   m_Name: DeathCam
   m_TagString: Untagged
@@ -174,7 +175,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60
+  field of view: 26.991467
   orthographic: 0
   orthographic size: 5
   m_Depth: 0
@@ -206,6 +207,31 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!114 &38005392
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 38005388}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ff5d873e55186c498477d5925d064f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SpawnPoint1: {fileID: 0}
+  m_SpawnPoint2: {fileID: 0}
+  m_SpawnPoint3: {fileID: 0}
+  m_SpawnPoint4: {fileID: 0}
+  m_NumRoundsToWin: 3
+  m_StartDelay: 3
+  m_EndDelay: 3
+  m_LocalTankPrefab: {fileID: 0}
+  m_OtherTankPrefab: {fileID: 0}
+  m_MessageText: {fileID: 0}
+  team1Count: 0
+  team2Count: 0
+  DeathCamera: 0
 --- !u!1 &162528680
 GameObject:
   m_ObjectHideFlags: 0
@@ -337,6 +363,7 @@ MonoBehaviour:
   m_MessageText: {fileID: 0}
   team1Count: 0
   team2Count: 0
+  DeathCamera: 0
 --- !u!4 &861734008
 Transform:
   m_ObjectHideFlags: 0

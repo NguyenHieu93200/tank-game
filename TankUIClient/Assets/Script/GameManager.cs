@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour
     private int m_RoundWinner;
     private int m_GameWinner;
     private Transform m_SpawmPoint1;
-    
+    public Camera DeathCamera;
 
 
 
@@ -38,8 +38,8 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         // Create the delays so they only have to be made once.
-        m_StartWait = new WaitForSeconds(m_StartDelay);
-        m_EndWait = new WaitForSeconds(m_EndDelay);
+        m_StartWait = new WaitForSeconds (m_StartDelay);
+        m_EndWait = new WaitForSeconds (m_EndDelay);
 
         SpawnAllTanks();
 
@@ -126,14 +126,14 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        team = 0;
+        team = -1;
         if (team1Remain == 0)
         {
-            team -= 1;
+            team = 1;
         }
         if (team2Remain == 0)
         {
-            team += 1;
+            team = 0;
         }
 
         if (team1Remain == 0 || team2Remain == 0)
@@ -142,4 +142,11 @@ public class GameManager : MonoBehaviour
         }
         return false;
     }
+
+    public void Reset()
+    {
+    DeathCamera.setActive(false);
+    }
+
 }
+    

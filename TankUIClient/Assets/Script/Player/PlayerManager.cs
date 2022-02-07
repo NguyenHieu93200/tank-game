@@ -12,7 +12,8 @@ public class PlayerManager : MonoBehaviour
     public float HEALTH;
     public int m_PlayerNumber;            // This specifies which player this the manager for.
     public byte teamid;
-    
+    public Tranform SpawnPoint;
+
     [HideInInspector] public GameObject m_Instance;         // A reference to the instance of the tank when it is created.
     [HideInInspector] public int m_Wins;                    // The number of wins this player has so far.
     public Rigidbody m_Shell;                   // Prefab of the shell.
@@ -119,5 +120,14 @@ public class PlayerManager : MonoBehaviour
 
         // Turn the tank off.
         gameObject.SetActive (false);
+    }
+
+        public void Reset ()
+        {
+        m_Instance.transform.position = m_SpawnPoint.position;
+        m_Instance.transform.rotation = m_SpawnPoint.rotation;
+
+        m_Instance.SetActive (false);
+        m_Instance.SetActive (true);
     }
 }

@@ -56,9 +56,9 @@ public class PacketHandler
                 TankDeathHandler(packet);
                 break;
             ////sWinRound,
-            //case (byte)ServerPackets.sWinRound:
-            //    WinRoundHandler(packet);
-            //    break;
+            case (byte)ServerPackets.sWinRound:
+                WinRoundHandler(packet);
+                  break;
             ////sWinGame,
             //case (byte)ServerPackets.sWinGame:
             //    WinGameHandler(packet);
@@ -317,10 +317,14 @@ public class PacketHandler
 
             PlayerManager tank = GameManager.instance.m_Tanks[_client];
             tank.OnDeath();
-            if (GameManager.instance.CheckTeamWinRound(out int winner))
-            {
-                Debug.Log($"Winner: {winner}");
-            }
+               
+            if(Client.instance.id == Client.instance.hostId) {
+           if (GameManager.instance.CheckTeamWinRound(out int winner))
+           {
+             Debug.Log($"Winner: {winner}");
+             PacketSender.WinRoundSender(Client.instance.roomId, (byte)(winner));
+           }
+           }
         }
         catch
         {
@@ -328,7 +332,17 @@ public class PacketHandler
         }
     }
     //sWinRound,
-    //sWinGame,
+    private static void WinRoundHandler(Packet packet)
+    {
+        int _room = packet.ReadInt();
+        int _team = packet.ReadByte();
+        Debug.Log($"Winner: {_team}");
+
+        GameManager.Reset();
+
+
+    }    
+        //sWinGame,
     //sDisconnect
     private static void DisconnectHandler(Packet packet)
     {
