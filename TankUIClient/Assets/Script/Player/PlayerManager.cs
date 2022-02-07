@@ -20,13 +20,27 @@ public class PlayerManager : MonoBehaviour
 
     public float m_LaunchForce = 50f;         // The force that will be given to the shell when the fire button is released.
 
-
     private GameObject m_CanvasGameObject;                  // Used to disable the world space UI during the Starting and Ending phases of each round.
+
+    public bool m_Dead;
+    private ParticleSystem m_ExplosionParticles;
+    public GameObject m_ExplosionPrefab;    
+    private AudioSource m_ExplosionAudio;
+
     private void Awake()
     {
         m_Rigidbody = GetComponent<Rigidbody>();
         m_Rigidbody.maxDepenetrationVelocity = float.PositiveInfinity;
         this.HEALTH = MAX_HEALTH;
+        
+        // Instantiate the explosion prefab and get a reference to the particle system on it.
+        m_ExplosionParticles = Instantiate (m_ExplosionPrefab).GetComponent<ParticleSystem> ();
+
+        // Get a reference to the audio source on the instantiated prefab.
+        m_ExplosionAudio = m_ExplosionParticles.GetComponent<AudioSource> ();
+
+        // Disable the prefab so it can be activated when it's required.
+        m_ExplosionParticles.gameObject.SetActive (false);
     }
     public void Setup()
     {
@@ -86,5 +100,24 @@ public class PlayerManager : MonoBehaviour
 
         //// Reset the launch force.  This is a precaution in case of missing button events.
         //m_CurrentLaunchForce = m_MinLaunchForce;
+    }
+
+    public void OnDeath()
+    {
+        // Set the flag so that this function is only called once.
+        m_Dead = true;
+
+        // Move the instantiated explosion prefab to the tank's position and turn it on.
+        m_ExplosionParticles.transform.position = transform.position;
+        m_ExplosionParticles.gameObject.SetActive (true);
+
+        // Play the particle system of the tank exploding.
+        m_ExplosionParticles.Play ();
+
+        // Play the tank explosion sound effect.
+        m_ExplosionAudio.Play();
+
+        // Turn the tank off.
+        gameObject.SetActive (false);
     }
 }

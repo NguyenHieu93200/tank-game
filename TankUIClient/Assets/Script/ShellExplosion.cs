@@ -65,6 +65,7 @@ public class ShellExplosion : MonoBehaviour
                 if(player.HEALTH <= 0)
                 {   
                     Debug.Log("A player died");
+                    PacketSender.TankDeathSender(player.m_PlayerNumber,Client.instance.roomId);
                 }
                 PacketSender.TankHealthSender(player.m_PlayerNumber,Client.instance.roomId,player.HEALTH);
 ;

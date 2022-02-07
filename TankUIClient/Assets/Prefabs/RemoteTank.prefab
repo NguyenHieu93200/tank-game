@@ -5048,6 +5048,8 @@ MonoBehaviour:
   m_Shell: {fileID: 5409530, guid: 008ecb1b70bec724fa2cd34255b0d8f8, type: 3}
   m_FireTransform: {fileID: 4527907914748612978}
   m_LaunchForce: 50
+  m_Dead: 0
+  m_ExplosionPrefab: {fileID: 151086, guid: 6bc6d0dd8b8428e4ca316513f2cf13c6, type: 3}
 --- !u!1 &3717280257474137847
 GameObject:
   m_ObjectHideFlags: 0

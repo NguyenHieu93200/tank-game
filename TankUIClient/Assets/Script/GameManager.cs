@@ -21,8 +21,8 @@ public class GameManager : MonoBehaviour
     public GameObject m_OtherTankPrefab;
     public Dictionary<int, PlayerManager> m_Tanks = new Dictionary<int, PlayerManager>();
     public Text m_MessageText;
-
-
+    public int team1Count;
+    public int team2Count;
 
     private int m_RoundNumber;
     private WaitForSeconds m_StartWait;
@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour
     private int m_RoundWinner;
     private int m_GameWinner;
     private Transform m_SpawmPoint1;
-
+    
 
 
 
@@ -50,8 +50,8 @@ public class GameManager : MonoBehaviour
     {
         // For all the tanks...
 
-        int team1Count = 0;
-        int team2Count = 0;
+        team1Count = 0;
+        team2Count = 0;
         foreach (PlayerInfo player in Client.instance.players)
         {
             Debug.Log("Create OTher Tank! ");
@@ -91,6 +91,7 @@ public class GameManager : MonoBehaviour
             tankManager.m_Instance = tank;
             tankManager.m_PlayerNumber = player.playerId;
             tankManager.teamid = player.team;
+            tankManager.m_Dead = false;
             m_Tanks.Add(player.playerId, tankManager);
             m_Tanks[player.playerId].Setup();
         }
@@ -108,5 +109,37 @@ public class GameManager : MonoBehaviour
             Debug.Log("Instance already exists, destroying object!");
             Destroy(this);
         }
+    }
+
+    public bool CheckTeamWinRound(out int team)
+    {
+        int team1Remain = 0, team2Remain = 0;
+
+        foreach (PlayerManager tank in m_Tanks.Values)
+        {
+            if (tank.teamid == 0 && tank.m_Dead==false)
+            {
+                team1Remain++;
+            } else if (tank.teamid == 1 && tank.m_Dead==false)
+            {
+                team2Remain++;
+            }
+        }
+
+        team = 0;
+        if (team1Remain == 0)
+        {
+            team -= 1;
+        }
+        if (team2Remain == 0)
+        {
+            team += 1;
+        }
+
+        if (team1Remain == 0 || team2Remain == 0)
+        {
+            return true;
+        }
+        return false;
     }
 }

@@ -52,9 +52,9 @@ public class PacketHandler
                 TankHealthHandler(packet);
                 break;
             ////sTankDeath,
-            //case (byte)ServerPackets.sTankDeath:
-            //    TankDeathHandler(packet);
-            //    break;
+            case (byte)ServerPackets.sTankDeath:
+                TankDeathHandler(packet);
+                break;
             ////sWinRound,
             //case (byte)ServerPackets.sWinRound:
             //    WinRoundHandler(packet);
@@ -307,6 +307,26 @@ public class PacketHandler
 
     }
     //sTankDeath,
+    private static void TankDeathHandler(Packet packet)
+    {
+        try
+        {
+            //TODO: host out
+            int _client = packet.ReadInt();
+            int _roomId = packet.ReadInt();
+
+            PlayerManager tank = GameManager.instance.m_Tanks[_client];
+            tank.OnDeath();
+            if (GameManager.instance.CheckTeamWinRound(out int winner))
+            {
+                Debug.Log($"Winner: {winner}");
+            }
+        }
+        catch
+        {
+
+        }
+    }
     //sWinRound,
     //sWinGame,
     //sDisconnect
