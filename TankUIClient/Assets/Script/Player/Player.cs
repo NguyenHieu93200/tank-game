@@ -6,7 +6,7 @@ public class PlayerInfo
 {
         public int playerId;
         public string username;
-        //public Tank tank;
+        public int tank;
 
         public byte team;
 
@@ -14,7 +14,7 @@ public class PlayerInfo
         {
             playerId = _playerId;
             username = _username;
-            // tank = Tank.CreateTank(_tankId);
+            tank = _tankId;
             //health = tank.maxhealth;
             team = _team;
         }

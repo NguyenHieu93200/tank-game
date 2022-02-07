@@ -8,6 +8,7 @@ public class PlayerManager : MonoBehaviour
     // Start is called before the first frame update
     public Color m_Team1Color;                             // This is the color this tank will be tinted.
     public Color m_Team2Color;
+    public Color m_TypeColor;
     public float MAX_HEALTH = 100f;
     public float HEALTH;
     public int m_PlayerNumber;            // This specifies which player this the manager for.
@@ -26,32 +27,39 @@ public class PlayerManager : MonoBehaviour
 
     public bool m_Dead;
     private ParticleSystem m_ExplosionParticles;
-    public GameObject m_ExplosionPrefab;    
+    public GameObject m_ExplosionPrefab;
     private AudioSource m_ExplosionAudio;
+
+    [HideInInspector] public SpecialFireDelegate SpecialFire;
+    [HideInInspector] public int TankType;
 
     private void Awake()
     {
         m_Rigidbody = GetComponent<Rigidbody>();
         m_Rigidbody.maxDepenetrationVelocity = float.PositiveInfinity;
-        this.HEALTH = MAX_HEALTH;
-        
+
         // Instantiate the explosion prefab and get a reference to the particle system on it.
-        m_ExplosionParticles = Instantiate (m_ExplosionPrefab).GetComponent<ParticleSystem> ();
+        m_ExplosionParticles = Instantiate(m_ExplosionPrefab).GetComponent<ParticleSystem>();
 
         // Get a reference to the audio source on the instantiated prefab.
-        m_ExplosionAudio = m_ExplosionParticles.GetComponent<AudioSource> ();
+        m_ExplosionAudio = m_ExplosionParticles.GetComponent<AudioSource>();
 
         // Disable the prefab so it can be activated when it's required.
-        m_ExplosionParticles.gameObject.SetActive (false);
+        m_ExplosionParticles.gameObject.SetActive(false);
     }
     public void Setup()
     {
-
+        this.HEALTH = MAX_HEALTH;
         // Get all of the renderers of the tank.
         MeshRenderer[] renderers = m_Instance.GetComponentsInChildren<MeshRenderer>();
 
         for (int i = 0; i < renderers.Length; i++)
         {
+            if (renderers[i].name == "TankTurret")
+            {
+                renderers[i].material.color = m_TypeColor;
+                continue;
+            }
             // ... set their material color to the color specific to this tank.
             if (teamid == 0)
             {
@@ -60,7 +68,7 @@ public class PlayerManager : MonoBehaviour
             {
                 renderers[i].material.color = m_Team2Color;
             }
-            
+
         }
     }
 
@@ -104,6 +112,8 @@ public class PlayerManager : MonoBehaviour
         //m_CurrentLaunchForce = m_MinLaunchForce;
     }
 
+    public delegate void SpecialFireDelegate();
+
     public void OnDeath()
     {
         // Set the flag so that this function is only called once.
@@ -111,23 +121,23 @@ public class PlayerManager : MonoBehaviour
 
         // Move the instantiated explosion prefab to the tank's position and turn it on.
         m_ExplosionParticles.transform.position = transform.position;
-        m_ExplosionParticles.gameObject.SetActive (true);
+        m_ExplosionParticles.gameObject.SetActive(true);
 
         // Play the particle system of the tank exploding.
-        m_ExplosionParticles.Play ();
+        m_ExplosionParticles.Play();
 
         // Play the tank explosion sound effect.
         m_ExplosionAudio.Play();
 
         // Turn the tank off.
-        gameObject.SetActive (false);
+        gameObject.SetActive(false);
     }
 
-        public void Reset ()
-        {
+    public void Reset()
+    {
         m_Instance.transform.position = SpawnPoint.position;
         m_Instance.transform.rotation = SpawnPoint.rotation;
-        m_Instance.SetActive (false);
-        m_Instance.SetActive (true);
+        m_Instance.SetActive(false);
+        m_Instance.SetActive(true);
     }
 }

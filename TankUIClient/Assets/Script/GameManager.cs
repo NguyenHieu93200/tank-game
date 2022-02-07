@@ -88,12 +88,18 @@ public class GameManager : MonoBehaviour
                 tank = Instantiate(m_OtherTankPrefab, SpawnPoint.position, SpawnPoint.rotation);
                 
             }
+
             PlayerManager tankManager = tank.GetComponent<PlayerManager>();
             tankManager.m_Instance = tank;
             tankManager.m_PlayerNumber = player.playerId;
             tankManager.teamid = player.team;
             tankManager.m_Dead = false;
             tankManager.SpawnPoint = SpawnPoint; // add spawn point
+
+            tankManager.TankType = player.tank;
+
+            TankType.Instance.InitializeSpecialInfo(tankManager);
+
             m_Tanks.Add(player.playerId, tankManager);
             m_Tanks[player.playerId].Setup();
         }
