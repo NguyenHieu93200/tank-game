@@ -5039,17 +5039,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Team1Color: {r: 1, g: 0.3915094, b: 0.6945616, a: 0}
   m_Team2Color: {r: 0.2663314, g: 0.34585503, b: 0.990566, a: 0}
+  m_TypeColor: {r: 0, g: 0, b: 0, a: 0}
   MAX_HEALTH: 100
   HEALTH: 0
+  Damage: 20
   m_PlayerNumber: 0
   teamid: 0
+  SpawnPoint: {fileID: 0}
   m_Instance: {fileID: 0}
   m_Wins: 0
-  m_Shell: {fileID: 5409530, guid: 008ecb1b70bec724fa2cd34255b0d8f8, type: 3}
+  m_Shell: {fileID: 192454, guid: 008ecb1b70bec724fa2cd34255b0d8f8, type: 3}
   m_FireTransform: {fileID: 4527907914748612978}
   m_LaunchForce: 50
   m_Dead: 0
   m_ExplosionPrefab: {fileID: 151086, guid: 6bc6d0dd8b8428e4ca316513f2cf13c6, type: 3}
+  TankType: 0
+  m_SpecialPrefab: {fileID: 0}
 --- !u!1 &3717280257474137847
 GameObject:
   m_ObjectHideFlags: 0

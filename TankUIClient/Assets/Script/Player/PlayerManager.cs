@@ -5,12 +5,16 @@ using UnityEngine.UI;
 public class PlayerManager : MonoBehaviour
 {
     private Rigidbody m_Rigidbody;              // Reference used to move the tank.
+    private TankShooting m_Shooting;
     // Start is called before the first frame update
     public Color m_Team1Color;                             // This is the color this tank will be tinted.
     public Color m_Team2Color;
     public Color m_TypeColor;
+
     public float MAX_HEALTH = 100f;
     public float HEALTH;
+    public float Damage = 20f;
+
     public int m_PlayerNumber;            // This specifies which player this the manager for.
     public byte teamid;
 
@@ -18,7 +22,8 @@ public class PlayerManager : MonoBehaviour
 
     [HideInInspector] public GameObject m_Instance;         // A reference to the instance of the tank when it is created.
     [HideInInspector] public int m_Wins;                    // The number of wins this player has so far.
-    public Rigidbody m_Shell;                   // Prefab of the shell.
+
+    public GameObject m_Shell;                   // Prefab of the shell.
     public Transform m_FireTransform;           // A child of the tank where the shells are spawned.
 
     public float m_LaunchForce = 50f;         // The force that will be given to the shell when the fire button is released.
@@ -32,10 +37,15 @@ public class PlayerManager : MonoBehaviour
 
     [HideInInspector] public SpecialFireDelegate SpecialFire;
     [HideInInspector] public int TankType;
+    [HideInInspector] public GameObject m_SpecialPrefab;
+
+    public float m_BaseAttackTime = 1.0f;
+    public float m_SpecialCooldown = 10.0f;
 
     private void Awake()
     {
         m_Rigidbody = GetComponent<Rigidbody>();
+        m_Shooting = GetComponent<TankShooting>();
         m_Rigidbody.maxDepenetrationVelocity = float.PositiveInfinity;
 
         // Instantiate the explosion prefab and get a reference to the particle system on it.
@@ -68,8 +78,8 @@ public class PlayerManager : MonoBehaviour
             {
                 renderers[i].material.color = m_Team2Color;
             }
-
         }
+        m_Shooting.UpdateAttackTime();
     }
 
     public void DisableControl()
@@ -98,9 +108,9 @@ public class PlayerManager : MonoBehaviour
     public void Fire()
     {
         // Create an instance of the shell and store a reference to it's rigidbody.
-        Rigidbody shellInstance =
-            Instantiate(m_Shell, m_FireTransform.position, m_FireTransform.rotation) as Rigidbody;
-
+        GameObject shell = Instantiate(m_Shell, m_FireTransform.position, m_FireTransform.rotation);
+        shell.GetComponent<ShellExplosion>().m_Damage = Damage; 
+        Rigidbody shellInstance = shell.GetComponent<Rigidbody>();
         // Set the shell's velocity to the launch force in the fire position's forward direction.
         shellInstance.velocity = m_LaunchForce * m_FireTransform.forward;
 

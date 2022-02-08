@@ -44,9 +44,9 @@ public class PacketHandler
                 TankShootHandler(packet);
                 break;
             ////sTankSpecial,
-            //case (byte)ServerPackets.sTankSpecial:
-            //    TankSpecialHandler(packet);
-            //    break;
+            case (byte)ServerPackets.sTankSpecial:
+                TankSpecialHandler(packet);
+                break;
             ////sTankHealth,
             case (byte)ServerPackets.sTankHealth:
                 TankHealthHandler(packet);
@@ -287,6 +287,33 @@ public class PacketHandler
         }
     }
     //sTankSpecial,
+    private static void TankSpecialHandler(Packet packet)
+    {
+        try
+        {
+            int _clientid = packet.ReadInt();
+            int _roomid = packet.ReadInt();
+
+            float _x = packet.ReadFloat();
+            float _z = packet.ReadFloat();
+            float _angley = packet.ReadFloat();
+            float _anglew = packet.ReadFloat();
+
+            PlayerManager tank = GameManager.instance.m_Tanks[_clientid];
+            Rigidbody body = tank.GetComponent<Rigidbody>();
+
+            body.MovePosition(new Vector3(_x, 0, _z));
+
+            body.MoveRotation(new Quaternion(0f, _angley, 0f, _anglew));
+
+            tank.SpecialFire();
+
+        }
+        catch (Exception ex)
+        {
+            Debug.Log(ex);
+        }
+    }
     //sTankHealth,
     private static void TankHealthHandler(Packet packet)
         {

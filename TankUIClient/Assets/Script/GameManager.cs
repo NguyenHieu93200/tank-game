@@ -98,7 +98,7 @@ public class GameManager : MonoBehaviour
 
             tankManager.TankType = player.tank;
 
-            TankType.Instance.InitializeSpecialInfo(tankManager);
+            TankType.instance.InitializeSpecialInfo(tankManager);
 
             m_Tanks.Add(player.playerId, tankManager);
             m_Tanks[player.playerId].Setup();
