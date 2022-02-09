@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class TankType : MonoBehaviour
 {
-    public static Dictionary<int, string> TankTypes = new Dictionary<int,string>()
+    public static string[] TankTypes = 
     {
-        {1, "Balancer" },
-        {2, "Tanky" }
+        "Balancer",
+        "Tanky"
     };
 
     public static TankType instance;
@@ -31,10 +31,10 @@ public class TankType : MonoBehaviour
     {
         switch (manager.TankType)
         {
-            case 1:
+            case 0:
                 DefaultTankInfo(manager);
                 break;
-            case 2:
+            case 1:
                 TankyTankInfo(manager);
                 break;
             default:
