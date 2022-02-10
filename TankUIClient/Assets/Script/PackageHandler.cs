@@ -194,6 +194,7 @@ public class PacketHandler
             if (_client == Client.instance.hostId)
             {
                 SceneManager.LoadScene(1);
+                return;
             }
             foreach(PlayerInfo player in Client.instance.players)
             {

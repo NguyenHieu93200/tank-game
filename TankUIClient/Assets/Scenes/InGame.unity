@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44504893, g: 0.49464077, b: 0.5737384, a: 1}
+  m_IndirectSpecularColor: {r: 0.44504875, g: 0.49464083, b: 0.57373863, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -497,6 +497,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SpecialShellPrefab: {fileID: 1804949086184891949, guid: 3c7538c21444fe94897159370ef06ec3, type: 3}
+  HealingPrefab: {fileID: 1826996989597008267, guid: a9238c26048e2d34997228d1c45c5f75, type: 3}
 --- !u!4 &1504691973
 Transform:
   m_ObjectHideFlags: 0

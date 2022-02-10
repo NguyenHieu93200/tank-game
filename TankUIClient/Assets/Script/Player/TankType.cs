@@ -13,6 +13,7 @@ public class TankType : MonoBehaviour
     public static TankType instance;
 
     public GameObject SpecialShellPrefab;
+    public GameObject HealingPrefab;
 
     private void Awake()
     {
@@ -46,7 +47,7 @@ public class TankType : MonoBehaviour
     private void DefaultTankInfo(PlayerManager manager)
     {
         manager.MAX_HEALTH = 100f;
-        manager.m_SpecialCooldown = 3f;
+        manager.m_SpecialCooldown = 5f;
         manager.m_TypeColor = new Color(0.57f, 0.91f, 0.74f);       // green
         manager.SpecialFire = delegate()
         {
@@ -73,7 +74,8 @@ public class TankType : MonoBehaviour
         manager.m_TypeColor = new Color(0.05f, 0.6f, 1f);       // blue
         manager.SpecialFire = delegate ()
         {
-            Debug.Log("Tanky Tank SPECIAL MOVE");
+            GameObject healing = Instantiate(HealingPrefab, manager.m_FireTransform.position, manager.m_FireTransform.rotation);
+            Destroy(healing, healing.GetComponent<ParticleSystem>().main.duration);
         };
     }
 }
