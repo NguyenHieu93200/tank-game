@@ -79,7 +79,7 @@ public class PlayerManager : MonoBehaviour
                 renderers[i].material.color = m_Team2Color;
             }
         }
-        m_Shooting.UpdateAttackTime();
+        if (m_Shooting) m_Shooting.UpdateAttackTime();
     }
 
     public void DisableControl()
