@@ -12,7 +12,6 @@ public class Health : MonoBehaviour
     private void Awake()
     {
         m_playerManager = GetComponent<PlayerManager>();
-        playerSlider2D = GetComponent<Slider>();
     }
     void Start()
     {
