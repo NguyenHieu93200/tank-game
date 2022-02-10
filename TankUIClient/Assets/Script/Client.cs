@@ -22,6 +22,7 @@ public class Client : MonoBehaviour
     public int roomId;
     public string roomName;
     public int hostId;
+    public byte tank = 0;
 
     public int count1 = 0 ;
     public int count2 = 0;

@@ -89,7 +89,7 @@ public class InRoomManager : MonoBehaviour
         {
             if (Client.instance.count2 < 2)
             {
-                PacketSender.InfoChangeSender(Client.instance.id, Client.instance.roomId, 1, 1);
+                PacketSender.InfoChangeSender(Client.instance.id, Client.instance.roomId, 1, Client.instance.tank);
                 return;
             }
         } 
@@ -97,7 +97,7 @@ public class InRoomManager : MonoBehaviour
         {
             if ( Client.instance.count1 < 2 )
             {
-                PacketSender.InfoChangeSender(Client.instance.id, Client.instance.roomId, 0, 1);
+                PacketSender.InfoChangeSender(Client.instance.id, Client.instance.roomId, 0, Client.instance.tank);
                 return;
             }
         }

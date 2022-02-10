@@ -6,7 +6,7 @@ public class PlayerInfo
 {
         public int playerId;
         public string username;
-        public int tank;
+        public byte tank;
 
         public byte team;
 

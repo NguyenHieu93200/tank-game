@@ -122,6 +122,7 @@ public class PacketHandler
                 if (Client.instance.players[i].playerId == Client.instance.id)
                 {
                     Client.instance.team = Client.instance.players[i].team;
+                    Client.instance.tank = Client.instance.players[i].tank;
                 }
                 if (Client.instance.players[i].team == 0)
                 {

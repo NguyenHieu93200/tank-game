@@ -70,7 +70,7 @@ public class TankType : MonoBehaviour
     private void TankyTankInfo(PlayerManager manager)
     {
         manager.MAX_HEALTH = 200f;
-        manager.m_TypeColor = new Color(0.05f, 0.6f, 0.73f);       // blue
+        manager.m_TypeColor = new Color(0.05f, 0.6f, 1f);       // blue
         manager.SpecialFire = delegate ()
         {
             Debug.Log("Tanky Tank SPECIAL MOVE");
