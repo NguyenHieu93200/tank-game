@@ -81,7 +81,7 @@ public class PacketHandler
         {
             Client.instance.id = packet.ReadInt();
             Debug.Log($"Receive id: {Client.instance.id} from server.");
-            Client.instance.udp.Connect(((IPEndPoint)Client.instance.tcp.socket.Client.LocalEndPoint).Port);
+            Client.instance.udp.Connect(Client.instance.tcp.socket.Client.RemoteEndPoint);
         }
         catch (Exception ex)
         {

@@ -37,7 +37,7 @@ public class PlayerManager : MonoBehaviour
 
     [HideInInspector] public SpecialFireDelegate SpecialFire;
     [HideInInspector] public int TankType;
-    [HideInInspector] public GameObject m_SpecialPrefab;
+    public Transform m_SelfEffectTransform;
 
     public float m_BaseAttackTime = 1.0f;
     public float m_SpecialCooldown = 10.0f;

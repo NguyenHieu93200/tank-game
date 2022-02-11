@@ -6,7 +6,7 @@ namespace TankClient
 {
     public enum TankList
     {
-        Tank1 = 1,
+        Tank1,
         Tank2,
         Tank3,
         Tank4

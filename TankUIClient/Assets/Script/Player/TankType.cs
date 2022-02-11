@@ -74,7 +74,8 @@ public class TankType : MonoBehaviour
         manager.m_TypeColor = new Color(0.05f, 0.6f, 1f);       // blue
         manager.SpecialFire = delegate ()
         {
-            GameObject healing = Instantiate(HealingPrefab, manager.m_FireTransform.position, manager.m_FireTransform.rotation);
+            GameObject healing = Instantiate(HealingPrefab, manager.m_SelfEffectTransform.position, manager.m_SelfEffectTransform.rotation);
+            healing.transform.parent = manager.gameObject.transform;
             Destroy(healing, healing.GetComponent<ParticleSystem>().main.duration);
         };
     }
