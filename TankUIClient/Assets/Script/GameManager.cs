@@ -25,8 +25,7 @@ public class GameManager : MonoBehaviour
     public int team2Count;
 
     private int m_RoundNumber;
-    private WaitForSeconds m_StartWait;
-    private WaitForSeconds m_EndWait;
+    private int m_StartWait = 3;
     private int m_RoundWinner;
     private int m_GameWinner;
     private Transform m_SpawmPoint1;
@@ -37,12 +36,9 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
+        DeathCamera.SetActive(true);
         // Create the delays so they only have to be made once.
-        m_StartWait = new WaitForSeconds (m_StartDelay);
-        m_EndWait = new WaitForSeconds (m_EndDelay);
-
-        SpawnAllTanks();
-
+        StartCoroutine(DelaySpawn(m_StartWait));
         // Once the tanks have been created and the camera is using them as targets, start the game.
     }
 
@@ -158,8 +154,16 @@ public class GameManager : MonoBehaviour
            Destroy(tank.m_Instance);
         }
         m_Tanks.Clear();
-        SpawnAllTanks();
+        DeathCamera.SetActive(true);
+        StartCoroutine(DelaySpawn(m_StartWait));
+    }
 
+    IEnumerator DelaySpawn(float delayTime)
+    {
+        //Wait for the specified delay time before continuing.
+        yield return new WaitForSeconds(delayTime);
+
+        SpawnAllTanks();
         DeathCamera.SetActive(false);
     }
 

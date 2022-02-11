@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TankClient;
 using UnityEngine;
 
 public class TankType : MonoBehaviour
@@ -7,13 +8,15 @@ public class TankType : MonoBehaviour
     public static string[] TankTypes = 
     {
         "Balancer",
-        "Tanky"
+        "Tanky",
+        "Tricker"
     };
 
     public static TankType instance;
 
     public GameObject SpecialShellPrefab;
     public GameObject HealingPrefab;
+    public GameObject SmokePrefab;
 
     private void Awake()
     {
@@ -37,6 +40,9 @@ public class TankType : MonoBehaviour
                 break;
             case 1:
                 TankyTankInfo(manager);
+                break;
+            case 2:
+                TrickerTankInfo(manager);
                 break;
             default:
                 DefaultTankInfo(manager);
@@ -70,13 +76,35 @@ public class TankType : MonoBehaviour
 
     private void TankyTankInfo(PlayerManager manager)
     {
-        manager.MAX_HEALTH = 200f;
+        manager.MAX_HEALTH = 150f;
+        manager.Damage = 15f;
         manager.m_TypeColor = new Color(0.05f, 0.6f, 1f);       // blue
         manager.SpecialFire = delegate ()
         {
             GameObject healing = Instantiate(HealingPrefab, manager.m_SelfEffectTransform.position, manager.m_SelfEffectTransform.rotation);
+            if (Client.instance.hostId == Client.instance.id)
+            {
+                manager.HEALTH = manager.HEALTH + 40 < manager.MAX_HEALTH ? manager.HEALTH + 40 : manager.MAX_HEALTH;
+                PacketSender.TankHealthSender(manager.m_PlayerNumber, Client.instance.roomId, manager.HEALTH);
+            }
             healing.transform.parent = manager.gameObject.transform;
             Destroy(healing, healing.GetComponent<ParticleSystem>().main.duration);
+        };
+    }
+
+    private void TrickerTankInfo(PlayerManager manager)
+    {
+        manager.MAX_HEALTH = 100f;
+        manager.Damage = 20f;
+        manager.m_TypeColor = new Color(0.05f, 0.6f, 1f);       // blue
+        manager.SpecialFire = delegate ()
+        {
+            // Create an instance of the shell and store a reference to it's rigidbody.
+            GameObject shell = Instantiate(SmokePrefab, manager.m_FireTransform.position, manager.m_FireTransform.rotation);
+            SmokeExplosion shellExplosion = shell.GetComponent<SmokeExplosion>();
+            Rigidbody shellInstance = shell.GetComponent<Rigidbody>();
+            // Set the shell's velocity to the launch force in the fire position's forward direction.
+            shellInstance.velocity = manager.m_LaunchForce * 0.3f * manager.m_FireTransform.forward;
         };
     }
 }

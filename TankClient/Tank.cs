@@ -21,12 +21,11 @@ namespace TankClient
         public string tankName;
         public static Tank CreateTank(byte _tankId)
         {
-            switch (_tankId)
+            return _tankId switch
             {
-                case (byte)TankList.Tank1:
-                    return new Tank1();
-            }
-            return null;
+                (byte)TankList.Tank1 => new Tank1(),
+                _ => new Tank1(),
+            };
         }
         public int TankShoot()
         {
