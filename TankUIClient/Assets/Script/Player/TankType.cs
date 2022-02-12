@@ -18,6 +18,7 @@ public class TankType : MonoBehaviour
     public GameObject SpecialShellPrefab;
     public GameObject HealingPrefab;
     public GameObject SmokePrefab;
+    public GameObject SpeedPrefab;
 
     private void Awake()
     {
@@ -82,10 +83,11 @@ public class TankType : MonoBehaviour
     {
         manager.MAX_HEALTH = 150f;
         manager.Damage = 15f;
+        manager.m_SpecialCooldown = 15f;
         manager.m_TypeColor = new Color(0.05f, 0.6f, 1f);       // blue
         manager.SpecialFire = delegate ()
         {
-            GameObject healing = Instantiate(HealingPrefab, manager.m_SelfEffectTransform.position, manager.m_SelfEffectTransform.rotation);
+            GameObject healing = Instantiate(HealingPrefab, manager.m_SelfEffectTransform.position, new Quaternion(0.0f, -0.7f, -0.7f, 0.0f));
             if (Client.instance.hostId == Client.instance.id)
             {
                 manager.HEALTH = manager.HEALTH + 40 < manager.MAX_HEALTH ? manager.HEALTH + 40 : manager.MAX_HEALTH;
@@ -100,7 +102,7 @@ public class TankType : MonoBehaviour
     {
         manager.MAX_HEALTH = 100f;
         manager.Damage = 20f;
-        manager.m_TypeColor = new Color(0.05f, 0.6f, 1f);       // blue
+        manager.m_TypeColor = new Color(0.5373f, 0.5882f, 0.5451f);       // smoke
         manager.SpecialFire = delegate ()
         {
             // Create an instance of the shell and store a reference to it's rigidbody.
@@ -116,12 +118,20 @@ public class TankType : MonoBehaviour
     {
         manager.MAX_HEALTH = 100f;
         manager.Damage = 25f;
-        manager.m_TypeColor = new Color(0.05f, 0.6f, 1f);       // blue
+        manager.m_TypeColor = new Color(1f, 0.91f, 0f);       // yellow 
         manager.SpecialFire = delegate ()
         {
+            Quaternion temp = manager.gameObject.transform.rotation;
+            temp.x = temp.w;
+            temp.z = -temp.y;
+            temp.y = 0;
+            temp.w = 0;
+            GameObject speed = Instantiate(SpeedPrefab, manager.m_SelfEffectTransform.position, temp);
+            speed.transform.parent = manager.gameObject.transform;
+            Destroy(speed, 5);
             if (manager.m_PlayerNumber == Client.instance.id)
             {
-                manager.gameObject.GetComponent<TankMovement>().m_Speed *= 3;
+                manager.gameObject.GetComponent<TankMovement>().m_Speed *= 2;
                 StartCoroutine(DelayFadeSpeed(5));
             }
         };
@@ -135,7 +145,7 @@ public class TankType : MonoBehaviour
         }
 
         void FadeSpeed() {
-            manager.gameObject.GetComponent<TankMovement>().m_Speed = 10;
+            manager.gameObject.GetComponent<TankMovement>().m_Speed /= 2;
         }
     }
 }
