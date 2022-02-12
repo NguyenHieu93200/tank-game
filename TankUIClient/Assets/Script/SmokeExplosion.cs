@@ -1,8 +1,5 @@
-using UnityEngine;
-using Packages;
-using System.Collections.Generic;
-using TankClient;
 using System.Collections;
+using UnityEngine;
 
 public class SmokeExplosion : MonoBehaviour
 {
@@ -12,7 +9,6 @@ public class SmokeExplosion : MonoBehaviour
     public float m_ExplosionForce = 5f;              // The amount of force added to a tank at the centre of the explosion.
     public float m_ExploseTime = 2f;                    // The time in seconds before the shell is removed.
     public float m_ExplosionRadius = 5f;                // The maximum distance away from the explosion tanks can be and are still affected.
-    private int hit = 1;
 
     private void Start()
     {

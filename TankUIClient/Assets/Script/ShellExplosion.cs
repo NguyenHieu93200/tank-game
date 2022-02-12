@@ -1,7 +1,5 @@
-using UnityEngine;
-using Packages;
-using System.Collections.Generic;
 using TankClient;
+using UnityEngine;
 
 public class ShellExplosion : MonoBehaviour
 {
@@ -53,8 +51,8 @@ public class ShellExplosion : MonoBehaviour
                 {
                     continue;
                 }
-                
-                if( player.HEALTH <= 0) 
+
+                if (player.HEALTH <= 0)
                 {
                     continue;
                 }
@@ -68,16 +66,16 @@ public class ShellExplosion : MonoBehaviour
                 float damage = CalculateDamage();
                 player.HEALTH -= damage;
                 Debug.Log($"Player {player.m_PlayerNumber} Take {damage}");
-                if(player.HEALTH <= 0)
-                {   
+                if (player.HEALTH <= 0)
+                {
                     Debug.Log("A player died");
 
-                    PacketSender.TankDeathSender(player.m_PlayerNumber,Client.instance.roomId);
+                    PacketSender.TankDeathSender(player.m_PlayerNumber, Client.instance.roomId);
 
                 }
-                PacketSender.TankHealthSender(player.m_PlayerNumber,Client.instance.roomId,player.HEALTH);   
+                PacketSender.TankHealthSender(player.m_PlayerNumber, Client.instance.roomId, player.HEALTH);
 
-                
+
                 //// Deal this damage to the tank.
                 //targetHealth.TakeDamage(damage);
             }
