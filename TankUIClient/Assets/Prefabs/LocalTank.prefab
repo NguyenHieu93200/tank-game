@@ -193,7 +193,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 135d538766ee1b64593eaa45d99b6e37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Team1Color: {r: 1, g: 0, b: 0.49820757, a: 0}
+  m_Team1Color: {r: 1, g: 0.043137256, b: 0, a: 0}
   m_Team2Color: {r: 0, g: 0.11023998, b: 1, a: 0}
   m_TypeColor: {r: 0, g: 0, b: 0, a: 0}
   MAX_HEALTH: 100
