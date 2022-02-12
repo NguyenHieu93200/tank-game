@@ -9,7 +9,8 @@ public class TankType : MonoBehaviour
     {
         "Balancer",
         "Tanky",
-        "Tricker"
+        "Tricker",
+        "Speed"
     };
 
     public static TankType instance;
@@ -43,6 +44,9 @@ public class TankType : MonoBehaviour
                 break;
             case 2:
                 TrickerTankInfo(manager);
+                break;
+            case 3:
+                SpeedTankInfo(manager);
                 break;
             default:
                 DefaultTankInfo(manager);
@@ -106,5 +110,32 @@ public class TankType : MonoBehaviour
             // Set the shell's velocity to the launch force in the fire position's forward direction.
             shellInstance.velocity = manager.m_LaunchForce * 0.3f * manager.m_FireTransform.forward;
         };
+    }
+
+    private void SpeedTankInfo(PlayerManager manager)
+    {
+        manager.MAX_HEALTH = 100f;
+        manager.Damage = 25f;
+        manager.m_TypeColor = new Color(0.05f, 0.6f, 1f);       // blue
+        manager.SpecialFire = delegate ()
+        {
+            if (manager.m_PlayerNumber == Client.instance.id)
+            {
+                manager.gameObject.GetComponent<TankMovement>().m_Speed *= 3;
+                StartCoroutine(DelayFadeSpeed(5));
+            }
+        };
+
+        IEnumerator DelayFadeSpeed(float delayTime)
+        {
+            //Wait for the specified delay time before continuing.
+            yield return new WaitForSeconds(delayTime);
+
+            FadeSpeed();
+        }
+
+        void FadeSpeed() {
+            manager.gameObject.GetComponent<TankMovement>().m_Speed = 10;
+        }
     }
 }

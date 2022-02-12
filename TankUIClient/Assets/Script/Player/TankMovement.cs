@@ -1,8 +1,6 @@
 ﻿using UnityEngine;
 using TankClient;
 
-namespace Complete
-{
     public class TankMovement : MonoBehaviour
     {
         public float m_Speed = 10f;                 // How fast the tank moves forward and back.
@@ -146,4 +144,3 @@ namespace Complete
             anglew = m_Rigidbody.rotation.w;
         }
     }
-}
