@@ -17,6 +17,7 @@ public class PlayerManager : MonoBehaviour
 
     public int m_PlayerNumber;            // This specifies which player this the manager for.
     public byte teamid;
+    public string Name;
 
     public Transform SpawnPoint;
 

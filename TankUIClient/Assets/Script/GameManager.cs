@@ -21,11 +21,16 @@ public class GameManager : MonoBehaviour
     public GameObject m_OtherTankPrefab;
     public Dictionary<int, PlayerManager> m_Tanks = new Dictionary<int, PlayerManager>();
     public Text m_MessageText;
+    public Text Score;
+    public Text team1;
+    public Text team2; 
     public int team1Count;
     public int team2Count;
-
+    public int team1Score = 0;
+    public int team2Score = 0;
     private int m_RoundNumber;
     private int m_StartWait = 3;
+    private int m_RoundScore = 0;
     private int m_RoundWinner;
     private int m_GameWinner;
     private Transform m_SpawmPoint1;
@@ -45,7 +50,7 @@ public class GameManager : MonoBehaviour
     private void SpawnAllTanks()
     {
         // For all the tanks...
-
+        m_RoundScore++;
         team1Count = 0;
         team2Count = 0;
         foreach (PlayerInfo player in Client.instance.players)
@@ -91,6 +96,7 @@ public class GameManager : MonoBehaviour
             tankManager.teamid = player.team;
             tankManager.m_Dead = false;
             tankManager.SpawnPoint = SpawnPoint; // add spawn point
+            tankManager.Name = player.username;
 
             tankManager.TankType = player.tank;
 
@@ -142,6 +148,8 @@ public class GameManager : MonoBehaviour
 
         if (team1Remain == 0 || team2Remain == 0)
         {
+            if ( team == 1 ) team2Score ++;
+            else team2Score ++;
             return true;
         }
         return false;
@@ -167,5 +175,11 @@ public class GameManager : MonoBehaviour
         DeathCamera.SetActive(false);
     }
 
+    public void Update()
+    {
+        Score.text = m_RoundScore +"";
+        team1.text = "TEAM 1 : " + team1Score;
+        team2.text = "TEAM 2 : " + team2Score;
+    }
 }
     
