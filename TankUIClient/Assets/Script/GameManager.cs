@@ -24,8 +24,8 @@ public class GameManager : MonoBehaviour
     public Text Score;
     public Text team1;
     public Text team2; 
-    public int team1Count;
-    public int team2Count;
+    public int team1Count = 0;
+    public int team2Count = 0;
     public int team1Score = 0;
     public int team2Score = 0;
     private int m_RoundNumber;

@@ -9,6 +9,7 @@ public class FriendInfo : MonoBehaviour
     [SerializeField]
     public Slider FriendHealth;
     private GameManager gameManager;
+    private int count;
     // Start is called before the first frame update
     void Start()
     {
@@ -19,6 +20,12 @@ public class FriendInfo : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Client.instance.team == 0)
+        {
+            count = gameManager.team1Count;
+        }
+        else count = gameManager.team2Count;
+        if (count >= 2) {
         foreach (PlayerManager _pm in gameManager.m_Tanks.Values)
         {
             if (_pm.teamid == Client.instance.team && _pm.m_PlayerNumber != Client.instance.id)
@@ -26,7 +33,14 @@ public class FriendInfo : MonoBehaviour
                 FriendName.text = _pm.Name;
                 FriendHealth.maxValue = _pm.MAX_HEALTH;
                 FriendHealth.value = _pm.HEALTH;
-            }
+                FriendHealth.gameObject.SetActive(true);
+                }
+        }
+        }
+        else
+        {
+            FriendName.text = "";
+            FriendHealth.gameObject.SetActive(false);
         }
     }
 }
