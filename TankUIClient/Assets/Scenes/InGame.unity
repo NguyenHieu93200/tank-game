@@ -1483,6 +1483,7 @@ MonoBehaviour:
   SpecialShellPrefab: {fileID: 1804949086184891949, guid: 3c7538c21444fe94897159370ef06ec3, type: 3}
   HealingPrefab: {fileID: 1826996989597008267, guid: a9238c26048e2d34997228d1c45c5f75, type: 3}
   SmokePrefab: {fileID: 981014018849949760, guid: 8ef590fba7cbe384f834050ee00fd9ea, type: 3}
+  SpeedPrefab: {fileID: 2850073072705670938, guid: 7919b4fde440fc94d944596040c67091, type: 3}
 --- !u!4 &1504691973
 Transform:
   m_ObjectHideFlags: 0
