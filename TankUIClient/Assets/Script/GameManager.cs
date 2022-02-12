@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     // team1 spawn
@@ -40,7 +40,8 @@ public class GameManager : MonoBehaviour
 
     // Start is called before the first frame update
     private void Start()
-    {
+    {   
+        m_MessageText.gameObject.SetActive(false);
         DeathCamera.SetActive(true);
         // Create the delays so they only have to be made once.
         StartCoroutine(DelaySpawn(m_StartWait));
@@ -148,11 +149,38 @@ public class GameManager : MonoBehaviour
 
         if (team1Remain == 0 || team2Remain == 0)
         {
-            if ( team == 1 ) team2Score ++;
-            else team2Score ++;
+            if (team == 1)
+            {
+                team2Score++;
+                CheckWinGame();
+            }
+            else
+            {
+                team2Score++;
+                CheckWinGame();
+            }
             return true;
         }
         return false;
+    }
+
+    public void CheckWinGame()
+    {
+        if(team1Score == 3 || team2Count == 0)
+        {
+            m_MessageText.text = "TEAM 1 WIN";
+            m_MessageText.gameObject.SetActive(true);
+            StartCoroutine(ExitGame(m_StartDelay));
+        }
+        else if(team2Score == 3 || team1Count == 0)
+        {
+            m_MessageText.text = "TEAM 2 WIN";
+            m_MessageText.gameObject.SetActive(true);
+            StartCoroutine(ExitGame(m_StartDelay));
+        }
+
+        
+
     }
 
     public void Reset()
@@ -181,5 +209,13 @@ public class GameManager : MonoBehaviour
         team1.text = "TEAM 1 : " + team1Score;
         team2.text = "TEAM 2 : " + team2Score;
     }
+
+    IEnumerator ExitGame(float delayTime)
+    {
+        yield return new WaitForSeconds(delayTime);
+
+        SceneManager.LoadScene(1);
+    }
+    // check
 }
     
