@@ -152,11 +152,15 @@ public class GameManager : MonoBehaviour
             if (team == 1)
             {
                 team2Score++;
+                m_MessageText.text = "TEAM 2 WIN ROUND!";
+                m_MessageText.gameObject.SetActive(true);
                 CheckWinGame();
             }
             else
             {
                 team2Score++;
+                m_MessageText.text = "TEAM 1 WIN ROUND!";
+                m_MessageText.gameObject.SetActive(true);
                 CheckWinGame();
             }
             return true;
@@ -168,13 +172,13 @@ public class GameManager : MonoBehaviour
     {
         if(team1Score == 3 || team2Count == 0)
         {
-            m_MessageText.text = "TEAM 1 WIN";
+            m_MessageText.text = "TEAM 1 WIN GAME!";
             m_MessageText.gameObject.SetActive(true);
             StartCoroutine(ExitGame(m_StartDelay));
         }
         else if(team2Score == 3 || team1Count == 0)
         {
-            m_MessageText.text = "TEAM 2 WIN";
+            m_MessageText.text = "TEAM 2 WIN GAME";
             m_MessageText.gameObject.SetActive(true);
             StartCoroutine(ExitGame(m_StartDelay));
         }
@@ -196,18 +200,24 @@ public class GameManager : MonoBehaviour
 
     IEnumerator DelaySpawn(float delayTime)
     {
+        if(m_RoundScore == 0 )
+        {
+            m_MessageText.gameObject.SetActive(true);
+            m_MessageText.text = "START GAME!";
+        }
         //Wait for the specified delay time before continuing.
         yield return new WaitForSeconds(delayTime);
 
         SpawnAllTanks();
+        m_MessageText.gameObject.SetActive(false);
         DeathCamera.SetActive(false);
     }
 
     public void Update()
     {
         Score.text = m_RoundScore +"";
-        team1.text = "TEAM 1 : " + team1Score;
-        team2.text = "TEAM 2 : " + team2Score;
+        team1.text =  "" + team1Score;
+        team2.text = "" + team2Score;
     }
 
     IEnumerator ExitGame(float delayTime)

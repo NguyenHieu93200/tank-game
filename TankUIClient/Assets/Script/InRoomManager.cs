@@ -67,14 +67,14 @@ public class InRoomManager : MonoBehaviour
             if (listing != null) listing.SetPlayerInfo(info);
         }
         StartButton.SetActive(true);
-        if (Client.instance.id != Client.instance.hostId)
-        {
-            StartButton.SetActive(false);
-        }
-        if ( Client.instance.count1 == 0 || Client.instance.count2 == 0 )
-        {
-            StartButton.SetActive(false);
-        }
+        //if (Client.instance.id != Client.instance.hostId)
+        //{
+        //    StartButton.SetActive(false);
+        //}
+        //if ( Client.instance.count1 == 0 || Client.instance.count2 == 0 )
+        //{
+        //    StartButton.SetActive(false);
+        //}
     }
 
     public void Back()
