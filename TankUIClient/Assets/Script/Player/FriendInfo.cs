@@ -14,7 +14,6 @@ public class FriendInfo : MonoBehaviour
     void Start()
     {
         gameManager = GetComponent<GameManager>();
-
     }
 
     // Update is called once per frame
@@ -26,18 +25,17 @@ public class FriendInfo : MonoBehaviour
         }
         else count = gameManager.team2Count;
         if (count >= 2) {
-        foreach (PlayerManager _pm in gameManager.m_Tanks.Values)
-        {
-            if (_pm.teamid == Client.instance.team && _pm.m_PlayerNumber != Client.instance.id)
+            foreach (PlayerManager _pm in gameManager.m_Tanks.Values)
             {
+                if (_pm.teamid == Client.instance.team && _pm.m_PlayerNumber != Client.instance.id)
+                {
                 FriendName.text = _pm.Name;
                 FriendHealth.maxValue = _pm.MAX_HEALTH;
                 FriendHealth.value = _pm.HEALTH;
                 FriendHealth.gameObject.SetActive(true);
                 }
-        }
-        }
-        else
+            }
+        }else
         {
             FriendName.text = "";
             FriendHealth.gameObject.SetActive(false);

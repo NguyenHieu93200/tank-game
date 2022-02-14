@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TankClient;
 public class GameManager : MonoBehaviour
 {
     // team1 spawn
@@ -35,7 +36,7 @@ public class GameManager : MonoBehaviour
     private int m_GameWinner;
     private Transform m_SpawmPoint1;
     public GameObject DeathCamera;
-
+    public  int isEnd = 0;
 
 
     // Start is called before the first frame update
@@ -152,38 +153,54 @@ public class GameManager : MonoBehaviour
             if (team == 1)
             {
                 team2Score++;
-                m_MessageText.text = "TEAM 2 WIN ROUND!";
-                m_MessageText.gameObject.SetActive(true);
+
+                if (team2Score < 3 ) WinRoundHandler(team);
                 CheckWinGame();
+
             }
             else
             {
-                team2Score++;
-                m_MessageText.text = "TEAM 1 WIN ROUND!";
-                m_MessageText.gameObject.SetActive(true);
+                team1Score++;
+                if (team1Score < 3) WinRoundHandler(team);
                 CheckWinGame();
+
             }
             return true;
         }
         return false;
     }
-
+    public void WinRoundHandler(int team)
+    {
+        //if (team == 1)
+        //{
+        //    team2Score++;
+        //}else
+        //{
+        //    team1Score++;
+        //}
+        if( team1Score < 3 || team2Score < 3) { 
+        m_MessageText.text = "TEAM " + (team+1) +  " WIN ROUND!";
+        m_MessageText.gameObject.SetActive(true);
+        }
+    }
+    public void WinGame(int team)
+    {
+        m_MessageText.text = "TEAM " + (team+1) + " WIN GAME!";
+        m_MessageText.gameObject.SetActive(true);
+        StartCoroutine(ExitGame(m_StartDelay));
+    }
     public void CheckWinGame()
     {
         if(team1Score == 3 || team2Count == 0)
         {
-            m_MessageText.text = "TEAM 1 WIN GAME!";
-            m_MessageText.gameObject.SetActive(true);
-            StartCoroutine(ExitGame(m_StartDelay));
+            isEnd = 1;
+            PacketSender.WinGameSender(Client.instance.roomId, (byte)0);
         }
         else if(team2Score == 3 || team1Count == 0)
         {
-            m_MessageText.text = "TEAM 2 WIN GAME";
-            m_MessageText.gameObject.SetActive(true);
-            StartCoroutine(ExitGame(m_StartDelay));
+            isEnd = 1;
+            PacketSender.WinGameSender(Client.instance.roomId, (byte)1);
         }
-
-        
 
     }
 
@@ -213,7 +230,7 @@ public class GameManager : MonoBehaviour
         DeathCamera.SetActive(false);
     }
 
-    public void Update()
+    public void LateUpdate()
     {
         Score.text = m_RoundScore +"";
         team1.text =  "" + team1Score;
@@ -223,7 +240,7 @@ public class GameManager : MonoBehaviour
     IEnumerator ExitGame(float delayTime)
     {
         yield return new WaitForSeconds(delayTime);
-
+        
         SceneManager.LoadScene(1);
     }
     // check

@@ -60,9 +60,9 @@ public class PacketHandler
                 WinRoundHandler(packet);
                   break;
             ////sWinGame,
-            //case (byte)ServerPackets.sWinGame:
-            //    WinGameHandler(packet);
-            //    break;
+            case (byte)ServerPackets.sWinGame:
+                WinGameHandler(packet);
+                break;
             //sDisconnect
             case (byte)ServerPackets.sDisconnect:
                 DisconnectHandler(packet);
@@ -355,7 +355,7 @@ public class PacketHandler
             if(Client.instance.id == Client.instance.hostId) {
                 if (GameManager.instance.CheckTeamWinRound(out int winner))
                 {
-                    Debug.Log($"Winner: {winner}");
+                    if(GameManager.instance.isEnd != 1)
                     PacketSender.WinRoundSender(Client.instance.roomId, (byte)(winner));
                 }
             }
@@ -370,11 +370,35 @@ public class PacketHandler
     {
         int _room = packet.ReadInt();
         int _team = packet.ReadByte();
-        Debug.Log($"Winner: {_team}");
 
-        GameManager.instance.Reset();
+
+        if(Client.instance.id != Client.instance.hostId)
+        {
+            if (_team == 1)
+            {
+                GameManager.instance.team2Score++;
+            }else
+            {
+                GameManager.instance.team1Score++;
+            }
+
+
+
+        }
+        if (GameManager.instance.team1Score < 3 || GameManager.instance.team2Score < 3)
+        {
+            GameManager.instance.WinRoundHandler(_team);
+            GameManager.instance.Reset();
+        }
+
     }    
     //sWinGame,
+    private static void WinGameHandler(Packet packet)
+    {
+        int _room = packet.ReadInt();
+        int _team = packet.ReadByte();
+        GameManager.instance.WinGame(_team);
+    }
     //sDisconnect
     private static void DisconnectHandler(Packet packet)
     {
