@@ -113,7 +113,7 @@ namespace TankClient
             packet.Write(_clientid);
             packet.Write(_roomid);
             packet.Write(_health);
-            Client.instance.udp.SendData(packet);
+            Client.instance.tcp.SendData(packet);
         }
 
         //cTankDeath,
@@ -122,7 +122,7 @@ namespace TankClient
             Packet packet = new Packet(0x00, (byte)ClientPackets.cTankDeath);
             packet.Write(_clientid);
             packet.Write(_roomid);
-            Client.instance.udp.SendData(packet);
+            Client.instance.tcp.SendData(packet);
         }
 
         //cWinRound,
