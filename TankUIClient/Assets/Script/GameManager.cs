@@ -123,7 +123,6 @@ public class GameManager : MonoBehaviour
 
     public bool CheckTeamWinRound(out int team)
     {
-        StartCoroutine(Wait(0.1f));
         int team1Remain = 0, team2Remain = 0;
 
         foreach (PlayerManager tank in m_Tanks.Values)

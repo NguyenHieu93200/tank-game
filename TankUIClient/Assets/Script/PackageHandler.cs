@@ -391,7 +391,6 @@ public class PacketHandler
     {
         int _room = packet.ReadInt();
         int _team = packet.ReadByte();
-        Debug.Log("I take this.");
         if (_team == 1)
         {
             GameManager.instance.team2Score++;
@@ -401,7 +400,6 @@ public class PacketHandler
         }
         if (GameManager.instance.team1Score < 3 || GameManager.instance.team2Score < 3)
         {
-            Debug.Log("I do this.");
             GameManager.instance.WinRoundHandler(_team);
             GameManager.instance.Reset();
         } else
