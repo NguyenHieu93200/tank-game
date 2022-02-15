@@ -114,16 +114,28 @@ public class Client : MonoBehaviour
                 }
 
                 byte[] _data = new byte[_bufferSize];
-
                 Array.Copy(buffer, _data, _bufferSize);
-
-                stream.BeginRead(buffer, 0, DataBufferSize, ReceiveCallback, null);
-
-                ThreadManager.ExecuteOnMainThread(() =>
+                int count = 0;
+                int length = _data.Length;
+                while (count < length)
                 {
-                    PacketHandler.Handle(_data);
-                });
-                
+                    int clength = BitConverter.ToInt32(_data, count);
+                    if (BitConverter.IsLittleEndian)
+                    {
+                        byte[] _converted = BitConverter.GetBytes(clength);
+                        Array.Reverse(_converted);
+                        clength = BitConverter.ToInt32(_converted, 0);
+                    }
+                    byte[] _temp = new byte[clength];
+                    Array.Copy(_data, count + 4, _temp, 0, clength - 4);
+                    count += clength;
+                    stream.BeginRead(buffer, 0, DataBufferSize, ReceiveCallback, null);
+
+                    ThreadManager.ExecuteOnMainThread(() =>
+                    {
+                        PacketHandler.Handle(_temp);
+                    });
+                }                
             }
             catch (Exception _ex)
             {
@@ -136,6 +148,7 @@ public class Client : MonoBehaviour
         {
             try
             {
+                _packet.InsertLength();
                 byte[] _buffer = _packet.ToArray();
                 if (socket != null)
                 {
@@ -189,6 +202,7 @@ public class Client : MonoBehaviour
         {
             try
             {
+                _packet.InsertLength();
                 if (socket != null)
                 {
                     socket.BeginSend(_packet.ToArray(), _packet.ToArray().Length, null, null);
@@ -213,9 +227,12 @@ public class Client : MonoBehaviour
                     return;
                 }
 
+                byte[] _byte = new byte[_data.Length];
+                Array.Copy(_data, 4, _byte, 0, _data.Length - 4);
+
                 ThreadManager.ExecuteOnMainThread(() =>
                 {
-                    PacketHandler.Handle(_data);
+                    PacketHandler.Handle(_byte);
                 });
             }
             catch (Exception _ex)

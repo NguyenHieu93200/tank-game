@@ -83,6 +83,16 @@ namespace TankClient
             return BitConverter.ToString(data).Replace("-", " ");
         }
 
+        public void InsertLength()
+        {
+            byte[] _converted = BitConverter.GetBytes(buffer.Count + 4);
+            if (BitConverter.IsLittleEndian)
+            {
+                Array.Reverse(_converted);
+            }
+            buffer.InsertRange(0, _converted);
+        }
+
         public void Write(byte _data)
         {
             buffer.Add(_data);

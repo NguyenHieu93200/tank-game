@@ -64,7 +64,7 @@ namespace TankServer
                     Array.Copy(buffer, _data, _bufferSize);
                     int count = 0;
                     int length = _data.Length;
-                    while (count >= length)
+                    while (count < length)
                     {
                         int clength = BitConverter.ToInt32(_data, count);
                         if (BitConverter.IsLittleEndian)
@@ -73,11 +73,11 @@ namespace TankServer
                             Array.Reverse(_converted);
                             clength = BitConverter.ToInt32(_converted, 0);
                         }
-                        Byte[] _temp = new Byte[clength];
+                        byte[] _temp = new byte[clength];
                         Array.Copy(_data, count+4, _temp, 0, clength-4);
                         count += clength;
                         stream.BeginRead(buffer, 0, DataBufferSize, DataReceiveCallback, null);
-                        ServerHandler.Handle(id, _data);
+                        ServerHandler.Handle(id, _temp);
                     }
 
                 }
@@ -145,9 +145,9 @@ namespace TankServer
             /// <param name="_packetData">The packet containing the recieved data.</param>
             public void HandleData(Packet _packetData)
             {
-                Byte[] _packet = _packetData.ToArray();
-                Byte[] _byte = new Byte[_packet.Length];
-                Array.Copy(_packet, _byte, _packet.Length);
+                byte[] _packet = _packetData.ToArray();
+                byte[] _byte = new byte[_packet.Length];
+                Array.Copy(_packet, 4, _byte, 0, _packet.Length - 4);
                 ServerHandler.Handle(id, _byte);
             }
 

@@ -94,7 +94,6 @@ namespace TankServer
             {
                 Array.Reverse(_converted);
             }
-            buffer.AddRange(_converted);
             buffer.InsertRange(0, _converted);
         }
 
