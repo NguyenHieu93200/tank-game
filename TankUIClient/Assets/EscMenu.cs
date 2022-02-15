@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-
+using TankClient;
 public class EscMenu : MonoBehaviour
 {
     public static bool IsPaused = false;
@@ -46,6 +46,7 @@ public class EscMenu : MonoBehaviour
     public void Quit()
     {
         IsPaused = false;
+        PacketSender.LeaveRoomSender(Client.instance.id,Client.instance.roomId);
         SceneManager.LoadScene(1);
     }
  
