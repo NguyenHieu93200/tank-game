@@ -145,6 +145,7 @@ public class TankType : MonoBehaviour
         }
 
         void FadeSpeed() {
+            if(manager && manager.gameObject)
             manager.gameObject.GetComponent<TankMovement>().m_Speed /= 2;
         }
     }
