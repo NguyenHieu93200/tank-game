@@ -48,6 +48,7 @@ namespace TankClient
         private int pos = 0;
         private readonly List<byte> buffer;
         private byte[] data;
+        private bool isLengthed = false;
 
         public Packet()
         {
@@ -81,6 +82,18 @@ namespace TankClient
         {
             data = buffer.ToArray();
             return BitConverter.ToString(data).Replace("-", " ");
+        }
+
+        public void InsertLength()
+        {
+            if (isLengthed) return;
+            isLengthed = true;
+            byte[] _converted = BitConverter.GetBytes(buffer.Count + 4);
+            if (BitConverter.IsLittleEndian)
+            {
+                Array.Reverse(_converted);
+            }
+            buffer.InsertRange(0, _converted);
         }
 
         public void Write(byte _data)

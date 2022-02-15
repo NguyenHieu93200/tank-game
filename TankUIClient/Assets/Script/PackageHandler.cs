@@ -40,29 +40,29 @@ public class PacketHandler
                 TankPositionHandler(packet);
                 break;
             ////sTankShoot,
-            //case (byte)ServerPackets.sTankShoot:
-            //    TankShootHandler(packet);
-            //    break;
+            case (byte)ServerPackets.sTankShoot:
+                TankShootHandler(packet);
+                break;
             ////sTankSpecial,
-            //case (byte)ServerPackets.sTankSpecial:
-            //    TankSpecialHandler(packet);
-            //    break;
+            case (byte)ServerPackets.sTankSpecial:
+                TankSpecialHandler(packet);
+                break;
             ////sTankHealth,
-            //case (byte)ServerPackets.sTankHealth:
-            //    TankHealthHandler(packet);
-            //    break;
+            case (byte)ServerPackets.sTankHealth:
+                TankHealthHandler(packet);
+                break;
             ////sTankDeath,
-            //case (byte)ServerPackets.sTankDeath:
-            //    TankDeathHandler(packet);
-            //    break;
+            case (byte)ServerPackets.sTankDeath:
+                TankDeathHandler(packet);
+                break;
             ////sWinRound,
-            //case (byte)ServerPackets.sWinRound:
-            //    WinRoundHandler(packet);
-            //    break;
+            case (byte)ServerPackets.sWinRound:
+                WinRoundHandler(packet);
+                  break;
             ////sWinGame,
-            //case (byte)ServerPackets.sWinGame:
-            //    WinGameHandler(packet);
-            //    break;
+            case (byte)ServerPackets.sWinGame:
+                WinGameHandler(packet);
+                break;
             //sDisconnect
             case (byte)ServerPackets.sDisconnect:
                 DisconnectHandler(packet);
@@ -81,7 +81,7 @@ public class PacketHandler
         {
             Client.instance.id = packet.ReadInt();
             Debug.Log($"Receive id: {Client.instance.id} from server.");
-            Client.instance.udp.Connect(((IPEndPoint)Client.instance.tcp.socket.Client.LocalEndPoint).Port);
+            Client.instance.udp.Connect(Client.instance.tcp.socket.Client.RemoteEndPoint);
         }
         catch (Exception ex)
         {
@@ -122,6 +122,7 @@ public class PacketHandler
                 if (Client.instance.players[i].playerId == Client.instance.id)
                 {
                     Client.instance.team = Client.instance.players[i].team;
+                    Client.instance.tank = Client.instance.players[i].tank;
                 }
                 if (Client.instance.players[i].team == 0)
                 {
@@ -192,7 +193,13 @@ public class PacketHandler
             int _client = packet.ReadInt();
             if (_client == Client.instance.hostId)
             {
-                SceneManager.LoadScene(1);
+                if( SceneManager.GetActiveScene().buildIndex == 4)
+                {
+                    GameManager.instance.HostOut();
+                }else { 
+                    SceneManager.LoadScene(1);
+                }
+                return;
             }
             foreach(PlayerInfo player in Client.instance.players)
             {
@@ -207,12 +214,32 @@ public class PacketHandler
                         Client.instance.count2--;
                     }
                     Client.instance.players.Remove(player);
+                    if (SceneManager.GetActiveScene().buildIndex == 4)
+                    {
+                        PlayerManager tank = GameManager.instance.m_Tanks[_client];
+                        tank.OnDeath();
+
+                        if( Client.instance.id == Client.instance.hostId)
+                        {
+                            if (GameManager.instance.CheckTeamWinRound(out int winner))
+                            {
+                                if (GameManager.instance.isEnd != 1 && GameManager.instance.isRoundEnd == false)
+                                {
+                                    PacketSender.WinRoundSender(Client.instance.roomId, (byte)(winner));
+                                    GameManager.instance.isRoundEnd = true;
+                                }
+                            }
+                        }
+                    } else
+                    {
+                        InRoomManager.instance.ListingPlayer(Client.instance.players);
+                    }
                     break;
                 }
             }
             Debug.Log("Hello");
 
-            InRoomManager.instance.ListingPlayer(Client.instance.players);
+
         }
         catch (Exception ex)
         {
@@ -259,11 +286,166 @@ public class PacketHandler
         }
     }
     //sTankShoot,
+    private static void TankShootHandler(Packet packet)
+    {
+        try
+        {
+            int _clientid = packet.ReadInt();
+            int _roomid = packet.ReadInt();
+
+                float _x = packet.ReadFloat();
+                float _z = packet.ReadFloat();
+                float _angley = packet.ReadFloat();
+                float _anglew = packet.ReadFloat();
+
+                PlayerManager tank = GameManager.instance.m_Tanks[_clientid];
+                Rigidbody body = tank.GetComponent<Rigidbody>();
+
+                body.MovePosition(new Vector3(_x, 0, _z));
+
+                body.MoveRotation(new Quaternion(0f, _angley, 0f, _anglew));
+
+                tank.Fire();
+
+        }
+        catch (Exception ex)
+        {
+            Debug.Log(ex);
+        }
+    }
     //sTankSpecial,
+    private static void TankSpecialHandler(Packet packet)
+    {
+        try
+        {
+            int _clientid = packet.ReadInt();
+            int _roomid = packet.ReadInt();
+
+            float _x = packet.ReadFloat();
+            float _z = packet.ReadFloat();
+            float _angley = packet.ReadFloat();
+            float _anglew = packet.ReadFloat();
+
+            PlayerManager tank = GameManager.instance.m_Tanks[_clientid];
+            Rigidbody body = tank.GetComponent<Rigidbody>();
+
+            body.MovePosition(new Vector3(_x, 0, _z));
+
+            body.MoveRotation(new Quaternion(0f, _angley, 0f, _anglew));
+
+            tank.SpecialFire();
+
+        }
+        catch (Exception ex)
+        {
+            Debug.Log(ex);
+        }
+    }
     //sTankHealth,
+    private static void TankHealthHandler(Packet packet)
+        {
+        try
+        {
+            //TODO: host out
+            int _client = packet.ReadInt();
+            int _roomId = packet.ReadInt();
+            float _heath = packet.ReadFloat();
+
+            PlayerManager tank = GameManager.instance.m_Tanks[_client];
+            tank.HEALTH = _heath;
+        }
+        catch
+        {
+
+        }
+
+    }
     //sTankDeath,
+    private static void TankDeathHandler(Packet packet)
+    {
+        try
+        {
+            //TODO: host out
+            int _client = packet.ReadInt();
+            int _roomId = packet.ReadInt();
+
+            PlayerManager tank = GameManager.instance.m_Tanks[_client];
+            tank.OnDeath();
+
+            if (Client.instance.id == _client)
+            {
+                GameManager.instance.DeathCamera.SetActive(true);
+            }
+               
+            if(Client.instance.id == Client.instance.hostId) {
+                if (GameManager.instance.CheckTeamWinRound(out int winner))
+                {
+                    if (winner == 1 && GameManager.instance.team2Score == 2)
+                    {
+                        GameManager.instance.team2Score++;
+                        GameManager.instance.CheckWinGame();
+                        return;
+                    }
+                    if (winner == 0 && GameManager.instance.team1Score == 2)
+                    {
+                        GameManager.instance.team1Score++;
+                        GameManager.instance.CheckWinGame();
+                        return;
+                    }
+                    if (GameManager.instance.isEnd != 1 && GameManager.instance.isRoundEnd == false) {
+                        PacketSender.WinRoundSender(Client.instance.roomId, (byte)(winner));
+                        GameManager.instance.isRoundEnd = true;
+                    }
+                }
+            }
+        }
+        catch
+        {
+
+        }
+    }
     //sWinRound,
+    private static void WinRoundHandler(Packet packet)
+    {
+        int _room = packet.ReadInt();
+        int _team = packet.ReadByte();
+        if (_team == 1)
+        {
+            GameManager.instance.team2Score++;
+        }else
+        {
+            GameManager.instance.team1Score++;
+        }
+        if (GameManager.instance.team1Score < 3 && GameManager.instance.team2Score < 3)
+        {
+            GameManager.instance.WinRoundHandler(_team);
+            GameManager.instance.Reset();
+        }
+        if (Client.instance.id == Client.instance.hostId)
+        {
+            GameManager.instance.CheckWinGame();
+        }
+
+    }    
     //sWinGame,
+    private static void WinGameHandler(Packet packet)
+    {
+        int _room = packet.ReadInt();
+        int _team = packet.ReadByte();
+
+        if (Client.instance.id != Client.instance.hostId)
+        {
+            if (_team == 1)
+            {
+                GameManager.instance.team2Score++;
+            }
+            else
+            {
+                GameManager.instance.team1Score++;
+            }
+        }
+        GameManager.instance.WinGame(_team);
+    }
     //sDisconnect
     private static void DisconnectHandler(Packet packet)
     {
@@ -273,9 +455,17 @@ public class PacketHandler
             int _client = packet.ReadInt();
             if (_client == Client.instance.hostId)
             {
-                SceneManager.LoadScene(1);
+                if (SceneManager.GetActiveScene().buildIndex == 4)
+                {
+                    GameManager.instance.HostOut();
+                }
+                else
+                {
+                    SceneManager.LoadScene(1);
+                }
+                return;
             }
-            foreach(PlayerInfo player in Client.instance.players)
+            foreach (PlayerInfo player in Client.instance.players)
             {
                 if (player.playerId == _client)
                 {
@@ -288,16 +478,37 @@ public class PacketHandler
                         Client.instance.count2--;
                     }
                     Client.instance.players.Remove(player);
+                    if (SceneManager.GetActiveScene().buildIndex == 4)
+                    {
+                        PlayerManager tank = GameManager.instance.m_Tanks[_client];
+                        tank.OnDeath();
+
+                        if (Client.instance.id == Client.instance.hostId)
+                        {
+                            if (GameManager.instance.CheckTeamWinRound(out int winner))
+                            {
+                                if (GameManager.instance.isEnd != 1 && GameManager.instance.isRoundEnd == false)
+                                {
+                                    PacketSender.WinRoundSender(Client.instance.roomId, (byte)(winner));
+                                    GameManager.instance.isRoundEnd = true;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        InRoomManager.instance.ListingPlayer(Client.instance.players);
+                    }
                     break;
                 }
             }
             Debug.Log("Hello");
-            InRoomManager.instance.ListingPlayer(Client.instance.players);
-            //TODO: Destroy
-        }
-        catch
-        {
 
+
+        }
+        catch (Exception ex)
+        {
+            Debug.Log(ex);
         }
     }
 }

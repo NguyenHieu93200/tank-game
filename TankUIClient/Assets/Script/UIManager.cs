@@ -61,8 +61,9 @@ public class UIManager : MonoBehaviour
             Client.instance.Connect(username, ip);
             SceneManager.LoadScene(1);
         }
-        catch (Exception)
+        catch (Exception _ex)
         {
+            Debug.Log(_ex);
             startMenu.SetActive(true);
             ErrorText.SetActive(true);
         }

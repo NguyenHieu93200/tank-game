@@ -10,7 +10,7 @@ public class Client : MonoBehaviour
 {
     public static Client instance = null;
     public const int DataBufferSize = 4096;
-    public readonly int port = 8000;
+    public readonly int port = 3636;
     public string ip = "127.0.0.1";
 
     public TCP tcp;
@@ -22,6 +22,7 @@ public class Client : MonoBehaviour
     public int roomId;
     public string roomName;
     public int hostId;
+    public byte tank = 0;
 
     public int count1 = 0 ;
     public int count2 = 0;
@@ -79,15 +80,16 @@ public class Client : MonoBehaviour
 
         public void Connect()
         {
-            socket = new TcpClient
+            socket = new TcpClient(AddressFamily.InterNetworkV6)
             {
                 ReceiveBufferSize = DataBufferSize,
                 SendBufferSize = DataBufferSize
             };
+            socket.Client.DualMode = true;
 
             buffer = new byte[DataBufferSize];
-
-            socket.Connect(ip, port);
+            Debug.Log($"Connecting to {ip}:{port}");
+            socket.Connect(IPAddress.Parse(ip), port);
 
             if (!socket.Connected)
             {
@@ -112,16 +114,28 @@ public class Client : MonoBehaviour
                 }
 
                 byte[] _data = new byte[_bufferSize];
-
                 Array.Copy(buffer, _data, _bufferSize);
-
-                stream.BeginRead(buffer, 0, DataBufferSize, ReceiveCallback, null);
-
-                ThreadManager.ExecuteOnMainThread(() =>
+                int count = 0;
+                int length = _data.Length;
+                while (count < length)
                 {
-                    PacketHandler.Handle(_data);
-                });
-                
+                    int clength = BitConverter.ToInt32(_data, count);
+                    if (BitConverter.IsLittleEndian)
+                    {
+                        byte[] _converted = BitConverter.GetBytes(clength);
+                        Array.Reverse(_converted);
+                        clength = BitConverter.ToInt32(_converted, 0);
+                    }
+                    byte[] _temp = new byte[clength];
+                    Array.Copy(_data, count + 4, _temp, 0, clength - 4);
+                    count += clength;
+                    stream.BeginRead(buffer, 0, DataBufferSize, ReceiveCallback, null);
+
+                    ThreadManager.ExecuteOnMainThread(() =>
+                    {
+                        PacketHandler.Handle(_temp);
+                    });
+                }                
             }
             catch (Exception _ex)
             {
@@ -134,6 +148,7 @@ public class Client : MonoBehaviour
         {
             try
             {
+                _packet.InsertLength();
                 byte[] _buffer = _packet.ToArray();
                 if (socket != null)
                 {
@@ -169,11 +184,13 @@ public class Client : MonoBehaviour
             endPoint = new IPEndPoint(IPAddress.Parse(instance.ip), instance.port);
         }
 
-        public void Connect(int _localPort)
+        public void Connect(EndPoint _endPoint)
         {
-            socket = new UdpClient(_localPort);
+            socket = new UdpClient(AddressFamily.InterNetworkV6);
+            socket.Client.DualMode = true;
 
-            socket.Connect(endPoint);
+            socket.Connect(((IPEndPoint)_endPoint).Address, ((IPEndPoint)_endPoint).Port);
+            
             socket.BeginReceive(ReceiveCallback, null);
 
             Packet _packet = new Packet(0x00, 0x00);
@@ -185,6 +202,7 @@ public class Client : MonoBehaviour
         {
             try
             {
+                _packet.InsertLength();
                 if (socket != null)
                 {
                     socket.BeginSend(_packet.ToArray(), _packet.ToArray().Length, null, null);
@@ -209,20 +227,23 @@ public class Client : MonoBehaviour
                     return;
                 }
 
+                byte[] _byte = new byte[_data.Length];
+                Array.Copy(_data, 4, _byte, 0, _data.Length - 4);
+
                 ThreadManager.ExecuteOnMainThread(() =>
                 {
-                    PacketHandler.Handle(_data);
+                    PacketHandler.Handle(_byte);
                 });
             }
-            catch (Exception)
+            catch (Exception _ex)
             {
-                //Disconnect();
+                Debug.Log(_ex.Message);
+                Debug.Log(_ex.StackTrace);
+                instance.Disconnect();
             }
         }
         public void Disconnect()
         {
-            instance.Disconnect();
-
             endPoint = null;
             socket = null;
         }
@@ -233,8 +254,10 @@ public class Client : MonoBehaviour
         if (tcp != null)
         {
             tcp.Disconnect();
+        } 
+        if (udp != null) { 
+            udp.Disconnect(); 
         }
-        udp.Disconnect();
         instance = null;
         Debug.Log("Disconnected.");
     }

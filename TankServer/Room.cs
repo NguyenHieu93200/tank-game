@@ -32,7 +32,7 @@ namespace TankServer
             teams[1] = new List<Client>();
             _host.roomId = roomId;
             _host.teamId = 0;
-            _host.tankId = 1;
+            _host.tankId = 0;
             isInGame = false;
             roomName = _roomName;
         }
@@ -43,13 +43,13 @@ namespace TankServer
             {
                 teams[0].Add(_client);
                 _client.teamId = 0;
-                _client.tankId = 1;
+                _client.tankId = 0;
             }
             else
             {
                 teams[1].Add(_client);
                 _client.teamId = 1;
-                _client.tankId = 1;
+                _client.tankId = 0;
             }
             _client.roomId = roomId;
         }
