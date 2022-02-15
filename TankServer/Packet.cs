@@ -46,6 +46,7 @@ namespace TankServer
         private int pos = 0;
         private readonly List<byte> buffer;
         private byte[] data;
+        private bool isLengthed = false;
 
         public Packet()
         {
@@ -89,6 +90,8 @@ namespace TankServer
 
         public void InsertLength()
         {
+            if (isLengthed) return;
+            isLengthed = true;
             byte[] _converted = BitConverter.GetBytes(buffer.Count + 4);
             if (BitConverter.IsLittleEndian)
             {
