@@ -152,9 +152,9 @@ namespace TankServer
             packet.OverwriteHeader(0x01, (byte)ServerPackets.sTankHealth);
             foreach (Client _client in Server.rooms[_roomId].GetClient())
             {
-                if (_client.tcp != null)
+                if (_client.udp != null)
                 {
-                    _client.tcp.SendData(packet);
+                    _client.udp.SendData(packet);
                 }
             }
         }
@@ -165,9 +165,9 @@ namespace TankServer
             packet.OverwriteHeader(0x01, (byte)ServerPackets.sTankDeath);
             foreach (Client _client in Server.rooms[_roomId].GetClient())
             {
-                if (_client.tcp != null)
+                if (_client.udp != null)
                 {
-                    _client.tcp.SendData(packet);
+                    _client.udp.SendData(packet);
                 }
             }
         }
