@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
-using TankClient;
+using System.Text;
 using UnityEngine;
+using TankClient;
 using UnityEngine.SceneManagement;
+using System.Net;
 
 public class PacketHandler
 {
@@ -56,7 +58,7 @@ public class PacketHandler
             ////sWinRound,
             case (byte)ServerPackets.sWinRound:
                 WinRoundHandler(packet);
-                break;
+                  break;
             ////sWinGame,
             case (byte)ServerPackets.sWinGame:
                 WinGameHandler(packet);
@@ -125,15 +127,14 @@ public class PacketHandler
                 if (Client.instance.players[i].team == 0)
                 {
                     Client.instance.count1++;
-                }
-                else
+                } else
                 {
                     Client.instance.count2++;
                 }
 
             }
-
-            while (true)
+            
+            while(true)
             {
                 if (SceneManager.GetSceneByBuildIndex(3).isLoaded)
                 {
@@ -192,17 +193,15 @@ public class PacketHandler
             int _client = packet.ReadInt();
             if (_client == Client.instance.hostId)
             {
-                if (SceneManager.GetActiveScene().buildIndex == 4)
+                if( SceneManager.GetActiveScene().buildIndex == 4)
                 {
                     GameManager.instance.HostOut();
-                }
-                else
-                {
+                }else { 
                     SceneManager.LoadScene(1);
                 }
                 return;
             }
-            foreach (PlayerInfo player in Client.instance.players)
+            foreach(PlayerInfo player in Client.instance.players)
             {
                 if (player.playerId == _client)
                 {
@@ -220,12 +219,11 @@ public class PacketHandler
                         PlayerManager tank = GameManager.instance.m_Tanks[_client];
                         tank.OnDeath();
 
-                        if (Client.instance.id == Client.instance.hostId)
+                        if( Client.instance.id == Client.instance.hostId)
                         {
                             GameManager.instance.CheckTeamWinRound(out int _winner);
                         }
-                    }
-                    else
+                    } else
                     {
                         InRoomManager.instance.ListingPlayer(Client.instance.players);
                     }
@@ -261,8 +259,7 @@ public class PacketHandler
         {
             int _clientid = packet.ReadInt();
             int _roomid = packet.ReadInt();
-            if (Client.instance.id != _clientid)
-            {
+            if (Client.instance.id != _clientid){
                 float _x = packet.ReadFloat();
                 float _z = packet.ReadFloat();
                 float _angley = packet.ReadFloat();
@@ -289,19 +286,19 @@ public class PacketHandler
             int _clientid = packet.ReadInt();
             int _roomid = packet.ReadInt();
 
-            float _x = packet.ReadFloat();
-            float _z = packet.ReadFloat();
-            float _angley = packet.ReadFloat();
-            float _anglew = packet.ReadFloat();
+                float _x = packet.ReadFloat();
+                float _z = packet.ReadFloat();
+                float _angley = packet.ReadFloat();
+                float _anglew = packet.ReadFloat();
 
-            PlayerManager tank = GameManager.instance.m_Tanks[_clientid];
-            Rigidbody body = tank.GetComponent<Rigidbody>();
+                PlayerManager tank = GameManager.instance.m_Tanks[_clientid];
+                Rigidbody body = tank.GetComponent<Rigidbody>();
 
-            body.MovePosition(new Vector3(_x, 0, _z));
+                body.MovePosition(new Vector3(_x, 0, _z));
 
-            body.MoveRotation(new Quaternion(0f, _angley, 0f, _anglew));
+                body.MoveRotation(new Quaternion(0f, _angley, 0f, _anglew));
 
-            tank.Fire();
+                tank.Fire();
 
         }
         catch (Exception ex)
@@ -339,7 +336,7 @@ public class PacketHandler
     }
     //sTankHealth,
     private static void TankHealthHandler(Packet packet)
-    {
+        {
         try
         {
             //TODO: host out
@@ -372,13 +369,12 @@ public class PacketHandler
             {
                 GameManager.instance.DeathCamera.SetActive(true);
             }
-
-            if (Client.instance.id == Client.instance.hostId)
-            {
+               
+            if(Client.instance.id == Client.instance.hostId) {
                 if (GameManager.instance.CheckTeamWinRound(out int winner))
                 {
-                    if (GameManager.instance.isEnd != 1 && GameManager.instance.isRoundEnd == false)
-                    {
+
+                    if (GameManager.instance.isEnd != 1 && GameManager.instance.isRoundEnd == false) {
                         PacketSender.WinRoundSender(Client.instance.roomId, (byte)(winner));
                         GameManager.instance.isRoundEnd = true;
                     }
@@ -399,8 +395,7 @@ public class PacketHandler
         if (_team == 1)
         {
             GameManager.instance.team2Score++;
-        }
-        else
+        }else
         {
             GameManager.instance.team1Score++;
         }
@@ -409,8 +404,7 @@ public class PacketHandler
             Debug.Log("I do this.");
             GameManager.instance.WinRoundHandler(_team);
             GameManager.instance.Reset();
-        }
-        else
+        } else
         {
             if (Client.instance.id == Client.instance.hostId)
             {
@@ -418,7 +412,7 @@ public class PacketHandler
             }
         }
 
-    }
+    }    
     //sWinGame,
     private static void WinGameHandler(Packet packet)
     {
@@ -452,7 +446,7 @@ public class PacketHandler
 
                 GameManager.instance.HostOut();
             }
-            foreach (PlayerInfo player in Client.instance.players)
+            foreach(PlayerInfo player in Client.instance.players)
             {
                 if (player.playerId == _client)
                 {

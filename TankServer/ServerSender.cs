@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace TankServer
 {
@@ -181,7 +180,6 @@ namespace TankServer
                 if (_client.tcp != null)
                 {
                     _client.tcp.SendData(packet);
-                    Console.WriteLine("I send real.");
                 }
             }
         }

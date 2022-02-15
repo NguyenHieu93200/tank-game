@@ -224,11 +224,6 @@ public class GameManager : MonoBehaviour
         
         SceneManager.LoadScene(1);
     }
-
-    IEnumerator Wait(float delayTime)
-    {
-        yield return new WaitForSeconds(delayTime);
-    }
     // check
 }
     
