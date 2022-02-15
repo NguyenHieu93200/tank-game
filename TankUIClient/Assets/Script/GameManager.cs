@@ -140,10 +140,12 @@ public class GameManager : MonoBehaviour
         if (team1Remain == 0)
         {
             team = 1;
+            return true;
         }
         if (team2Remain == 0)
         {
             team = 0;
+            return true;
         }
         return false;
     }
