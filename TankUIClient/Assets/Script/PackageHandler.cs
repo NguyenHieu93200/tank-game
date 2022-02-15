@@ -221,7 +221,14 @@ public class PacketHandler
 
                         if( Client.instance.id == Client.instance.hostId)
                         {
-                            GameManager.instance.CheckTeamWinRound(out int _winner);
+                            if (GameManager.instance.CheckTeamWinRound(out int winner))
+                            {
+                                if (GameManager.instance.isEnd != 1 && GameManager.instance.isRoundEnd == false)
+                                {
+                                    PacketSender.WinRoundSender(Client.instance.roomId, (byte)(winner));
+                                    GameManager.instance.isRoundEnd = true;
+                                }
+                            }
                         }
                     } else
                     {
@@ -373,7 +380,6 @@ public class PacketHandler
             if(Client.instance.id == Client.instance.hostId) {
                 if (GameManager.instance.CheckTeamWinRound(out int winner))
                 {
-
                     if (GameManager.instance.isEnd != 1 && GameManager.instance.isRoundEnd == false) {
                         PacketSender.WinRoundSender(Client.instance.roomId, (byte)(winner));
                         GameManager.instance.isRoundEnd = true;
@@ -398,16 +404,14 @@ public class PacketHandler
         {
             GameManager.instance.team1Score++;
         }
-        if (GameManager.instance.team1Score < 3 || GameManager.instance.team2Score < 3)
+        if (GameManager.instance.team1Score < 3 && GameManager.instance.team2Score < 3)
         {
             GameManager.instance.WinRoundHandler(_team);
             GameManager.instance.Reset();
-        } else
+        }
+        if (Client.instance.id == Client.instance.hostId)
         {
-            if (Client.instance.id == Client.instance.hostId)
-            {
-                GameManager.instance.CheckWinGame();
-            }
+            GameManager.instance.CheckWinGame();
         }
 
     }    
@@ -441,10 +445,17 @@ public class PacketHandler
             int _client = packet.ReadInt();
             if (_client == Client.instance.hostId)
             {
-
-                GameManager.instance.HostOut();
+                if (SceneManager.GetActiveScene().buildIndex == 4)
+                {
+                    GameManager.instance.HostOut();
+                }
+                else
+                {
+                    SceneManager.LoadScene(1);
+                }
+                return;
             }
-            foreach(PlayerInfo player in Client.instance.players)
+            foreach (PlayerInfo player in Client.instance.players)
             {
                 if (player.playerId == _client)
                 {
@@ -457,16 +468,37 @@ public class PacketHandler
                         Client.instance.count2--;
                     }
                     Client.instance.players.Remove(player);
+                    if (SceneManager.GetActiveScene().buildIndex == 4)
+                    {
+                        PlayerManager tank = GameManager.instance.m_Tanks[_client];
+                        tank.OnDeath();
+
+                        if (Client.instance.id == Client.instance.hostId)
+                        {
+                            if (GameManager.instance.CheckTeamWinRound(out int winner))
+                            {
+                                if (GameManager.instance.isEnd != 1 && GameManager.instance.isRoundEnd == false)
+                                {
+                                    PacketSender.WinRoundSender(Client.instance.roomId, (byte)(winner));
+                                    GameManager.instance.isRoundEnd = true;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        InRoomManager.instance.ListingPlayer(Client.instance.players);
+                    }
                     break;
                 }
             }
             Debug.Log("Hello");
-            InRoomManager.instance.ListingPlayer(Client.instance.players);
-            //TODO: Destroy
-        }
-        catch
-        {
 
+
+        }
+        catch (Exception ex)
+        {
+            Debug.Log(ex);
         }
     }
 }
