@@ -223,13 +223,15 @@ public class PacketHandler
                         {
                             GameManager.instance.CheckTeamWinRound(out int _winner);
                         }
+                    } else
+                    {
+                        InRoomManager.instance.ListingPlayer(Client.instance.players);
                     }
                     break;
                 }
             }
             Debug.Log("Hello");
 
-            InRoomManager.instance.ListingPlayer(Client.instance.players);
 
         }
         catch (Exception ex)
@@ -369,6 +371,7 @@ public class PacketHandler
             }
                
             if(Client.instance.id == Client.instance.hostId) {
+                if (GameManager.instance.isRoundEnd) return;
                 if (GameManager.instance.CheckTeamWinRound(out int winner))
                 {
                     if(GameManager.instance.isEnd != 1)

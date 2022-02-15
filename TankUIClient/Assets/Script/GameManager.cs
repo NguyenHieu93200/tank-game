@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour
     public int team1Score = 0;
     public int team2Score = 0;
     private int m_RoundNumber;
-    private bool isRoundEnd = false;
+    public bool isRoundEnd = false;
     private int m_StartWait = 3;
     private int m_RoundScore = 0;
     public GameObject DeathCamera;
@@ -174,14 +174,8 @@ public class GameManager : MonoBehaviour
     }
     public void WinRoundHandler(int team)
     {
-        //if (team == 1)
-        //{
-        //    team2Score++;
-        //}else
-        //{
-        //    team1Score++;
-        //}
-        if( team1Score < 3 || team2Score < 3) { 
+        isRoundEnd = true;
+        if ( team1Score < 3 || team2Score < 3) { 
             m_MessageText.text = "TEAM " + (team+1) +  " WIN ROUND!";
             m_MessageText.gameObject.SetActive(true);
         }
@@ -217,7 +211,6 @@ public class GameManager : MonoBehaviour
 
     public void Reset()
     {
-        isRoundEnd = true;
         foreach (PlayerManager tank in m_Tanks.Values)
         {
            Destroy(tank.m_Instance);
