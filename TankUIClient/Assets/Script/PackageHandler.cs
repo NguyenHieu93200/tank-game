@@ -197,7 +197,7 @@ public class PacketHandler
                 {
                     GameManager.instance.HostOut();
                 }else { 
-                SceneManager.LoadScene(1);
+                    SceneManager.LoadScene(1);
                 }
                 return;
             }
