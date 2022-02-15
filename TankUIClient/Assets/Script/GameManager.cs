@@ -123,6 +123,7 @@ public class GameManager : MonoBehaviour
 
     public bool CheckTeamWinRound(out int team)
     {
+        StartCoroutine(Wait(0.1f));
         int team1Remain = 0, team2Remain = 0;
 
         foreach (PlayerManager tank in m_Tanks.Values)
@@ -223,6 +224,11 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(delayTime);
         
         SceneManager.LoadScene(1);
+    }
+
+    IEnumerator Wait(float delayTime)
+    {
+        yield return new WaitForSeconds(delayTime);
     }
     // check
 }

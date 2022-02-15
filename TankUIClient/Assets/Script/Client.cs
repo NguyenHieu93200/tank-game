@@ -116,6 +116,12 @@ public class Client : MonoBehaviour
                 byte[] _data = new byte[_bufferSize];
 
                 Array.Copy(buffer, _data, _bufferSize);
+                string datastr = "";
+                foreach (byte data in _data)
+                {
+                    datastr += data + " ";
+                }
+                Debug.Log(datastr);
 
                 stream.BeginRead(buffer, 0, DataBufferSize, ReceiveCallback, null);
 
