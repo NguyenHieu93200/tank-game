@@ -193,6 +193,7 @@ public class PacketHandler
             int _client = packet.ReadInt();
             if (_client == Client.instance.hostId)
             {
+
                 SceneManager.LoadScene(1);
                 return;
             }
@@ -215,6 +216,11 @@ public class PacketHandler
             Debug.Log("Hello");
 
             InRoomManager.instance.ListingPlayer(Client.instance.players);
+            if (GameManager.instance.isEnd == 0)
+            {
+                PlayerManager tank = GameManager.instance.m_Tanks[_client];
+                tank.OnDeath();
+            }
         }
         catch (Exception ex)
         {
@@ -408,7 +414,8 @@ public class PacketHandler
             int _client = packet.ReadInt();
             if (_client == Client.instance.hostId)
             {
-                SceneManager.LoadScene(1);
+
+                GameManager.instance.HostOut();
             }
             foreach(PlayerInfo player in Client.instance.players)
             {

@@ -189,6 +189,12 @@ public class GameManager : MonoBehaviour
         m_MessageText.gameObject.SetActive(true);
         StartCoroutine(ExitGame(m_StartDelay));
     }
+    public void HostOut()
+    {
+        m_MessageText.text = "Host out!!";
+        m_MessageText.gameObject.SetActive(true);
+        StartCoroutine(ExitGame(m_StartDelay));
+    }
     public void CheckWinGame()
     {
         if(team1Score == 3 || team2Count == 0)
