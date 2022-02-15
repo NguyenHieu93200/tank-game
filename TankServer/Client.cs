@@ -61,12 +61,25 @@ namespace TankServer
                         return;
                     }
                     byte[] _data = new byte[_bufferSize];
-
                     Array.Copy(buffer, _data, _bufferSize);
+                    int count = 0;
+                    int length = _data.Length;
+                    while (count >= length)
+                    {
+                        int clength = BitConverter.ToInt32(_data, count);
+                        if (BitConverter.IsLittleEndian)
+                        {
+                            byte[] _converted = BitConverter.GetBytes(clength);
+                            Array.Reverse(_converted);
+                            clength = BitConverter.ToInt32(_converted, 0);
+                        }
+                        Byte[] _temp = new Byte[clength];
+                        Array.Copy(_data, count+4, _temp, 0, clength-4);
+                        count += clength;
+                        stream.BeginRead(buffer, 0, DataBufferSize, DataReceiveCallback, null);
+                        ServerHandler.Handle(id, _data);
+                    }
 
-                    stream.BeginRead(buffer, 0, DataBufferSize, DataReceiveCallback, null);
-
-                    ServerHandler.Handle(id, _data);
                 }
                 catch (Exception _ex)
                 {
@@ -79,6 +92,7 @@ namespace TankServer
             {
                 try
                 {
+                    _packet.InsertLength();
                     byte[] _buffer = _packet.ToArray();
                     if (socket != null)
                     {
@@ -123,6 +137,7 @@ namespace TankServer
             /// <param name="_packet">The packet to send.</param>
             public void SendData(Packet _packet)
             {
+                _packet.InsertLength();
                 Server.SendUDPData(endPoint, _packet);
             }
 
@@ -130,8 +145,10 @@ namespace TankServer
             /// <param name="_packetData">The packet containing the recieved data.</param>
             public void HandleData(Packet _packetData)
             {
-
-                ServerHandler.Handle(id, _packetData.ToArray());
+                Byte[] _packet = _packetData.ToArray();
+                Byte[] _byte = new Byte[_packet.Length];
+                Array.Copy(_packet, _byte, _packet.Length);
+                ServerHandler.Handle(id, _byte);
             }
 
             public void Disconnect()
