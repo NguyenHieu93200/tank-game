@@ -183,12 +183,7 @@ public class GameManager : MonoBehaviour
         m_MessageText.gameObject.SetActive(true);
         }
     }
-    public void WinGame(int team)
-    {
-        m_MessageText.text = "TEAM " + (team+1) + " WIN GAME!";
-        m_MessageText.gameObject.SetActive(true);
-        StartCoroutine(ExitGame(m_StartDelay));
-    }
+
     public void HostOut()
     {
         m_MessageText.text = "Host out!!";
@@ -208,6 +203,12 @@ public class GameManager : MonoBehaviour
             PacketSender.WinGameSender(Client.instance.roomId, (byte)1);
         }
 
+    }
+    public void WinGame(int team)
+    {
+        m_MessageText.text = "TEAM " + (team + 1) + " WIN GAME!";
+        m_MessageText.gameObject.SetActive(true);
+        StartCoroutine(ExitGame(m_StartDelay));
     }
 
     public void Reset()

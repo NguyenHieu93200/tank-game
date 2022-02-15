@@ -193,8 +193,12 @@ public class PacketHandler
             int _client = packet.ReadInt();
             if (_client == Client.instance.hostId)
             {
-
+                if( SceneManager.GetActiveScene().buildIndex == 4)
+                {
+                    GameManager.instance.HostOut();
+                }else { 
                 SceneManager.LoadScene(1);
+                }
                 return;
             }
             foreach(PlayerInfo player in Client.instance.players)
@@ -210,17 +214,23 @@ public class PacketHandler
                         Client.instance.count2--;
                     }
                     Client.instance.players.Remove(player);
+                    if (SceneManager.GetActiveScene().buildIndex == 4)
+                    {
+                        PlayerManager tank = GameManager.instance.m_Tanks[_client];
+                        tank.OnDeath();
+
+                        if( Client.instance.id == Client.instance.hostId)
+                        {
+                            GameManager.instance.CheckTeamWinRound(out int _winner);
+                        }
+                    }
                     break;
                 }
             }
             Debug.Log("Hello");
 
             InRoomManager.instance.ListingPlayer(Client.instance.players);
-            if (GameManager.instance.isEnd == 0)
-            {
-                PlayerManager tank = GameManager.instance.m_Tanks[_client];
-                tank.OnDeath();
-            }
+
         }
         catch (Exception ex)
         {
