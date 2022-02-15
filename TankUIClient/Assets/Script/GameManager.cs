@@ -195,12 +195,12 @@ public class GameManager : MonoBehaviour
     }
     public void CheckWinGame()
     {
-        if(team1Score == 3 || team2Count == 0)
+        if(team1Score == 3 || Client.instance.count2 == 0)
         {
             isEnd = 1;
             PacketSender.WinGameSender(Client.instance.roomId, 0);
         }
-        else if(team2Score == 3 || team1Count == 0)
+        else if(team2Score == 3 || Client.instance.count1 == 0)
         {
             isEnd = 1;
             PacketSender.WinGameSender(Client.instance.roomId, 1);

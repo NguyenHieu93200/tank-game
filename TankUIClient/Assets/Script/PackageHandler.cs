@@ -413,6 +413,20 @@ public class PacketHandler
     {
         int _room = packet.ReadInt();
         int _team = packet.ReadByte();
+
+        if (Client.instance.id != Client.instance.hostId)
+        {
+            if (_team == 1)
+            {
+                GameManager.instance.team2Score++;
+            }
+            else
+            {
+                GameManager.instance.team1Score++;
+            }
+
+        }
+
         GameManager.instance.WinGame(_team);
     }
     //sDisconnect
