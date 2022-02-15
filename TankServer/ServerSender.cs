@@ -33,6 +33,7 @@ namespace TankServer
         {
             Packet packet = new(0x01, (byte)ServerPackets.sRoomInfo);
             packet.Write(_roomId);
+            if (Server.rooms[_roomId] == null) return;
             packet.Write(Server.rooms[_roomId].roomName);
             packet.Write(Server.rooms[_roomId].hostId);
             List<Client> clients = Server.rooms[_roomId].GetClient();
@@ -97,6 +98,7 @@ namespace TankServer
         public static void GameStartSender(int _roomId)
         {
             Packet packet = new(0x01, (byte)ServerPackets.sGameStart);
+            if (Server.rooms[_roomId] == null) return;
             foreach (Client _client in Server.rooms[_roomId].GetClient())
             {
                 if (_client.tcp != null)
@@ -110,6 +112,7 @@ namespace TankServer
         public static void TankPositionSender(Packet packet, int _roomId)
         {
             packet.OverwriteHeader(0x01, (byte)ServerPackets.sTankPosition);
+            if (Server.rooms[_roomId] == null) return;
             foreach (Client _client in Server.rooms[_roomId].GetClient())
             {
                 if (_client.udp != null)
@@ -123,6 +126,7 @@ namespace TankServer
         public static void TankShootSender(Packet packet, int _roomId)
         {
             packet.OverwriteHeader(0x01, (byte)ServerPackets.sTankShoot);
+            if (Server.rooms[_roomId] == null) return;
             foreach (Client _client in Server.rooms[_roomId].GetClient())
             {
                 if (_client.udp != null)
@@ -136,6 +140,7 @@ namespace TankServer
         public static void TankSpecialSender(Packet packet, int _roomId)
         {
             packet.OverwriteHeader(0x01, (byte)ServerPackets.sTankSpecial);
+            if (Server.rooms[_roomId] == null) return;
             foreach (Client _client in Server.rooms[_roomId].GetClient())
             {
                 if (_client.udp != null)
@@ -149,6 +154,7 @@ namespace TankServer
         public static void TankHealthSender(Packet packet, int _roomId)
         {
             packet.OverwriteHeader(0x01, (byte)ServerPackets.sTankHealth);
+            if (Server.rooms[_roomId] == null) return;
             foreach (Client _client in Server.rooms[_roomId].GetClient())
             {
                 if (_client.tcp != null)
@@ -162,6 +168,7 @@ namespace TankServer
         public static void TankDeathSender(Packet packet, int _roomId)
         {
             packet.OverwriteHeader(0x01, (byte)ServerPackets.sTankDeath);
+            if (Server.rooms[_roomId] == null) return;
             foreach (Client _client in Server.rooms[_roomId].GetClient())
             {
                 if (_client.tcp != null)
@@ -175,6 +182,7 @@ namespace TankServer
         public static void WinRoundSender(Packet packet, int _roomId)
         {
             packet.OverwriteHeader(0x01, (byte)ServerPackets.sWinRound);
+            if (Server.rooms[_roomId] == null) return;
             foreach (Client _client in Server.rooms[_roomId].GetClient())
             {
                 if (_client.tcp != null)
@@ -188,6 +196,7 @@ namespace TankServer
         public static void WinGameSender(Packet packet, int _roomId)
         {
             packet.OverwriteHeader(0x01, (byte)ServerPackets.sWinGame);
+            if (Server.rooms[_roomId] == null) return;
             foreach (Client _client in Server.rooms[_roomId].GetClient())
             {
                 if (_client.tcp != null)
@@ -203,6 +212,7 @@ namespace TankServer
             Packet packet = new Packet(0x01, (byte)ServerPackets.sDisconnect);
             packet.Write(_clientid);
             packet.Write(_roomId);
+            if (Server.rooms[_roomId] == null) return;
             foreach (Client _client in Server.rooms[_roomId].GetClient())
             {
                 if (_client.id != _clientid)
@@ -219,6 +229,7 @@ namespace TankServer
         public static void LeaveRoomSender(Packet packet, int _roomId)
         {
             packet.OverwriteHeader(0x01, (byte)ServerPackets.sLeaveRoom);
+            if (Server.rooms[_roomId] == null) return;
             foreach (Client _client in Server.rooms[_roomId].GetClient())
             {
                 if (_client.tcp != null)
