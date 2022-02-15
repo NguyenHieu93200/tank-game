@@ -124,11 +124,6 @@ public class GameManager : MonoBehaviour
     public bool CheckTeamWinRound(out int team)
     {
         int team1Remain = 0, team2Remain = 0;
-        if (isRoundEnd)
-        {
-            team = 0;
-            return false;
-        }
 
         foreach (PlayerManager tank in m_Tanks.Values)
         {
@@ -150,31 +145,10 @@ public class GameManager : MonoBehaviour
         {
             team = 0;
         }
-
-        if (team1Remain == 0 || team2Remain == 0)
-        {
-            if (team == 1)
-            {
-                team2Score++;
-
-                if (team2Score < 3 ) WinRoundHandler(team);
-                CheckWinGame();
-
-            }
-            else
-            {
-                team1Score++;
-                if (team1Score < 3) WinRoundHandler(team);
-                CheckWinGame();
-
-            }
-            return true;
-        }
         return false;
     }
     public void WinRoundHandler(int team)
     {
-        isRoundEnd = true;
         if ( team1Score < 3 || team2Score < 3) { 
             m_MessageText.text = "TEAM " + (team+1) +  " WIN ROUND!";
             m_MessageText.gameObject.SetActive(true);
@@ -203,7 +177,6 @@ public class GameManager : MonoBehaviour
     }
     public void WinGame(int team)
     {
-        isRoundEnd = true;
         m_MessageText.text = "TEAM " + (team + 1) + " WIN GAME!";
         m_MessageText.gameObject.SetActive(true);
         StartCoroutine(ExitGame(m_StartDelay));

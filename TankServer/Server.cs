@@ -64,7 +64,6 @@ namespace TankServer
         {
             try
             {
-                Console.WriteLine("Pass that one");
                 IPEndPoint _clientEndPoint = new IPEndPoint(IPAddress.Any, 0);
                 byte[] _data = udpListener.EndReceive(_result, ref _clientEndPoint);
                 udpListener.BeginReceive(UDPReceiveCallback, null);

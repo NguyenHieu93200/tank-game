@@ -7,8 +7,8 @@ namespace TankServer
         public static void Handle(int _clientId, byte[] _data)
         {
             Packet packet = new(_data);
-            Console.Write($"Receive from {_clientId}: ");
-            Console.WriteLine(packet.ToHexString());
+            //Console.Write($"Receive from {_clientId}: ");
+            //Console.WriteLine(packet.ToHexString());
             packet.ReadByte();
             byte packetType = packet.ReadByte();
             switch (packetType)
@@ -168,7 +168,7 @@ namespace TankServer
             int _client = packet.ReadInt();
             int _roomId = packet.ReadInt();
             ServerSender.TankPositionSender(packet, _roomId);
-            Console.WriteLine($"Client {_client} has moved in room {_roomId}.");
+            //Console.WriteLine($"Client {_client} has moved in room {_roomId}.");
         }
 
         //cTankShoot

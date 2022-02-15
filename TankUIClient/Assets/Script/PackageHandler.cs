@@ -374,8 +374,9 @@ public class PacketHandler
                 if (GameManager.instance.isRoundEnd) return;
                 if (GameManager.instance.CheckTeamWinRound(out int winner))
                 {
-                    if(GameManager.instance.isEnd != 1)
-                    PacketSender.WinRoundSender(Client.instance.roomId, (byte)(winner));
+                    GameManager.instance.isRoundEnd = true;
+                    if (GameManager.instance.isEnd != 1)
+                        PacketSender.WinRoundSender(Client.instance.roomId, (byte)(winner));
                 }
             }
         }
@@ -391,23 +392,23 @@ public class PacketHandler
         int _team = packet.ReadByte();
 
 
-        if(Client.instance.id != Client.instance.hostId)
+        if (_team == 1)
         {
-            if (_team == 1)
-            {
-                GameManager.instance.team2Score++;
-            }else
-            {
-                GameManager.instance.team1Score++;
-            }
-
-
-
+            GameManager.instance.team2Score++;
+        }else
+        {
+            GameManager.instance.team1Score++;
         }
         if (GameManager.instance.team1Score < 3 || GameManager.instance.team2Score < 3)
         {
             GameManager.instance.WinRoundHandler(_team);
             GameManager.instance.Reset();
+        } else
+        {
+            if (Client.instance.id == Client.instance.hostId)
+            {
+                GameManager.instance.CheckWinGame();
+            }
         }
 
     }    
