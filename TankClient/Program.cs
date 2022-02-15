@@ -14,7 +14,7 @@ namespace TankClient
             Console.Write("> ");
             string username = Console.ReadLine();
 
-            new Client("127.0.0.1", 8000);
+            new Client("127.0.0.1", 3636);
             if (Client.instance == null)
             {
                 Console.WriteLine("------------------------------------------------");

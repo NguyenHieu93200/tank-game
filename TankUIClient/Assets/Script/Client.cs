@@ -10,7 +10,7 @@ public class Client : MonoBehaviour
 {
     public static Client instance = null;
     public const int DataBufferSize = 4096;
-    public readonly int port = 8000;
+    public readonly int port = 3636;
     public string ip = "127.0.0.1";
 
     public TCP tcp;
@@ -22,6 +22,7 @@ public class Client : MonoBehaviour
     public int roomId;
     public string roomName;
     public int hostId;
+    public byte tank = 0;
 
     public int count1 = 0 ;
     public int count2 = 0;
@@ -79,15 +80,16 @@ public class Client : MonoBehaviour
 
         public void Connect()
         {
-            socket = new TcpClient
+            socket = new TcpClient(AddressFamily.InterNetworkV6)
             {
                 ReceiveBufferSize = DataBufferSize,
                 SendBufferSize = DataBufferSize
             };
+            socket.Client.DualMode = true;
 
             buffer = new byte[DataBufferSize];
-
-            socket.Connect(ip, port);
+            Debug.Log($"Connecting to {ip}:{port}");
+            socket.Connect(IPAddress.Parse(ip), port);
 
             if (!socket.Connected)
             {
@@ -169,11 +171,13 @@ public class Client : MonoBehaviour
             endPoint = new IPEndPoint(IPAddress.Parse(instance.ip), instance.port);
         }
 
-        public void Connect(int _localPort)
+        public void Connect(EndPoint _endPoint)
         {
-            socket = new UdpClient(_localPort);
+            socket = new UdpClient(AddressFamily.InterNetworkV6);
+            socket.Client.DualMode = true;
 
-            socket.Connect(endPoint);
+            socket.Connect(((IPEndPoint)_endPoint).Address, ((IPEndPoint)_endPoint).Port);
+            
             socket.BeginReceive(ReceiveCallback, null);
 
             Packet _packet = new Packet(0x00, 0x00);
@@ -214,15 +218,15 @@ public class Client : MonoBehaviour
                     PacketHandler.Handle(_data);
                 });
             }
-            catch (Exception)
+            catch (Exception _ex)
             {
-                //Disconnect();
+                Debug.Log(_ex.Message);
+                Debug.Log(_ex.StackTrace);
+                instance.Disconnect();
             }
         }
         public void Disconnect()
         {
-            instance.Disconnect();
-
             endPoint = null;
             socket = null;
         }
@@ -233,8 +237,10 @@ public class Client : MonoBehaviour
         if (tcp != null)
         {
             tcp.Disconnect();
+        } 
+        if (udp != null) { 
+            udp.Disconnect(); 
         }
-        udp.Disconnect();
         instance = null;
         Debug.Log("Disconnected.");
     }

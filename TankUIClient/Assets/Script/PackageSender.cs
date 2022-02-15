@@ -90,7 +90,7 @@ namespace TankClient
             packet.Write(_z);
             packet.Write(_angley);
             packet.Write(_anglew);
-            Client.instance.tcp.SendData(packet);
+            Client.instance.udp.SendData(packet);
         }
 
         //cTankSpecial,
@@ -103,11 +103,11 @@ namespace TankClient
             packet.Write(_z);
             packet.Write(_angley);
             packet.Write(_anglew);
-            Client.instance.tcp.SendData(packet);
+            Client.instance.udp.SendData(packet);
         }
 
         //cTankHealth,
-        public static void TankHealthSender(int _clientid, int _roomid, int _health)
+        public static void TankHealthSender(int _clientid, int _roomid, float _health)
         {
             Packet packet = new Packet(0x00, (byte)ClientPackets.cTankHealth);
             packet.Write(_clientid);

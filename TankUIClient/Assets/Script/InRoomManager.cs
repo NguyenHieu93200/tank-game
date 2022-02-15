@@ -51,6 +51,7 @@ public class InRoomManager : MonoBehaviour
                 Destroy(child.gameObject);
             }
         }
+
         foreach (PlayerInfo info in players)
         {
 
@@ -66,14 +67,14 @@ public class InRoomManager : MonoBehaviour
             if (listing != null) listing.SetPlayerInfo(info);
         }
         StartButton.SetActive(true);
-        if (Client.instance.id != Client.instance.hostId)
-        {
-            StartButton.SetActive(false);
-        }
-        if (Client.instance.count1 == 0 || Client.instance.count2 == 0)
-        {
-            StartButton.SetActive(false);
-        }
+        //if (Client.instance.id != Client.instance.hostId)
+        //{
+        //    StartButton.SetActive(false);
+        //}
+        //if ( Client.instance.count1 == 0 || Client.instance.count2 == 0 )
+        //{
+        //    StartButton.SetActive(false);
+        //}
     }
 
     public void Back()
@@ -88,7 +89,7 @@ public class InRoomManager : MonoBehaviour
         {
             if (Client.instance.count2 < 2)
             {
-                PacketSender.InfoChangeSender(Client.instance.id, Client.instance.roomId, 1, 1);
+                PacketSender.InfoChangeSender(Client.instance.id, Client.instance.roomId, 1, Client.instance.tank);
                 return;
             }
         } 
@@ -96,7 +97,7 @@ public class InRoomManager : MonoBehaviour
         {
             if ( Client.instance.count1 < 2 )
             {
-                PacketSender.InfoChangeSender(Client.instance.id, Client.instance.roomId, 0, 1);
+                PacketSender.InfoChangeSender(Client.instance.id, Client.instance.roomId, 0, Client.instance.tank);
                 return;
             }
         }

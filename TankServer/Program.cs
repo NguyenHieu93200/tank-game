@@ -7,7 +7,7 @@ namespace TankServer
         static void Main()
         {
             Console.Title = "Tank Server";
-            Server.Start(_maxPlayers: 4, _maxRooms: 4, _port: 8000);
+            Server.Start(_maxPlayers: 4, _maxRooms: 1, _port: 3636);
             Console.ReadKey();
         }
     }

@@ -26,9 +26,12 @@ namespace TankServer
             Console.WriteLine($"Set MaxPlayers to {MaxPlayers}.\nSet MaxRooms to {MaxRooms}.");
             InitializeServerData();
 
-            tcpListener = new TcpListener(localaddr: IPAddress.Any, port: Port);
+            tcpListener = new TcpListener(new IPEndPoint(IPAddress.IPv6Any, Port));
+            tcpListener.Server.DualMode = true;
 
-            udpListener = new UdpClient(Port);
+            udpListener = new UdpClient(AddressFamily.InterNetworkV6);
+            udpListener.Client.DualMode = true;
+            udpListener.Client.Bind(new IPEndPoint(IPAddress.IPv6Any, Port));
             udpListener.BeginReceive(UDPReceiveCallback, null);
 
             tcpListener.Start();

@@ -7,8 +7,8 @@ namespace TankServer
         public static void Handle(int _clientId, byte[] _data)
         {
             Packet packet = new(_data);
-            Console.Write($"Receive from {_clientId}: ");
-            Console.WriteLine(packet.ToHexString());
+            //Console.Write($"Receive from {_clientId}: ");
+            //Console.WriteLine(packet.ToHexString());
             packet.ReadByte();
             byte packetType = packet.ReadByte();
             switch (packetType)
@@ -168,7 +168,7 @@ namespace TankServer
             int _client = packet.ReadInt();
             int _roomId = packet.ReadInt();
             ServerSender.TankPositionSender(packet, _roomId);
-            Console.WriteLine($"Client {_client} has moved in room {_roomId}.");
+            //Console.WriteLine($"Client {_client} has moved in room {_roomId}.");
         }
 
         //cTankShoot
@@ -203,7 +203,7 @@ namespace TankServer
         {
             int _client = packet.ReadInt();
             int _roomId = packet.ReadInt();
-            ServerSender.TankPositionSender(packet, _roomId);
+            ServerSender.TankDeathSender(packet, _roomId);
             Console.WriteLine($"Client {_client} has been slain moved in room {_roomId}.");
         }
 
@@ -212,7 +212,7 @@ namespace TankServer
         {
             int _roomId = packet.ReadInt();
             byte _teamId = packet.ReadByte();
-            ServerSender.TankPositionSender(packet, _roomId);
+            ServerSender.WinRoundSender(packet, _roomId);
             Console.WriteLine($"Team {_teamId} has won this round in room {_roomId}.");
         }
 
@@ -221,7 +221,7 @@ namespace TankServer
         {
             int _roomId = packet.ReadInt();
             byte _teamId = packet.ReadByte();
-            ServerSender.TankPositionSender(packet, _roomId);
+            ServerSender.WinGameSender(packet, _roomId);
             Console.WriteLine($"Team {_teamId} has won this game in room {_roomId}.");
             Server.rooms[_roomId].CloseRoom();
             Console.WriteLine($"Room {_roomId} is closed.");

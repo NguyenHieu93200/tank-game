@@ -9,8 +9,11 @@ namespace TankServer
         {
             Packet packet = new(0x01, (byte)ServerPackets.sError);
             packet.Write(_message);
+            if (Server.clients[_clientId].tcp == null)
+            {
+                return;
+            }
             Server.clients[_clientId].tcp.SendData(packet);
-
         }
 
         //sConnect
@@ -18,6 +21,10 @@ namespace TankServer
         {
             Packet packet = new(0x01, (byte)ServerPackets.sConnect);
             packet.Write(_clientId);
+            if (Server.clients[_clientId].tcp == null)
+            {
+                return;
+            }
             Server.clients[_clientId].tcp.SendData(packet);
         }
 
@@ -41,11 +48,18 @@ namespace TankServer
             {
                 foreach (Client _client in clients)
                 {
-                    _client.tcp.SendData(packet);
+                    if (_client.tcp != null)
+                    {
+                        _client.tcp.SendData(packet);
+                    }
                 }
             }
             else
             {
+                if (Server.clients[_clientId].tcp == null)
+                {
+                    return;
+                }
                 Server.clients[_clientId].tcp.SendData(packet);
             }
         }
@@ -72,6 +86,10 @@ namespace TankServer
                     packet.Write(Server.rooms[i].GetClient().Count);
                 }
             }
+            if (Server.clients[_clientId].tcp == null)
+            {
+                return;
+            }
             Server.clients[_clientId].tcp.SendData(packet);
         }
 
@@ -81,7 +99,10 @@ namespace TankServer
             Packet packet = new(0x01, (byte)ServerPackets.sGameStart);
             foreach (Client _client in Server.rooms[_roomId].GetClient())
             {
-                _client.tcp.SendData(packet);
+                if (_client.tcp != null)
+                {
+                    _client.tcp.SendData(packet);
+                }
             }
         }
 
@@ -91,7 +112,10 @@ namespace TankServer
             packet.OverwriteHeader(0x01, (byte)ServerPackets.sTankPosition);
             foreach (Client _client in Server.rooms[_roomId].GetClient())
             {
-                _client.udp.SendData(packet);
+                if (_client.udp != null)
+                {
+                    _client.udp.SendData(packet);
+                }
             }
         }
 
@@ -101,7 +125,10 @@ namespace TankServer
             packet.OverwriteHeader(0x01, (byte)ServerPackets.sTankShoot);
             foreach (Client _client in Server.rooms[_roomId].GetClient())
             {
-                _client.tcp.SendData(packet);
+                if (_client.udp != null)
+                {
+                    _client.udp.SendData(packet);
+                }
             }
         }
 
@@ -111,7 +138,10 @@ namespace TankServer
             packet.OverwriteHeader(0x01, (byte)ServerPackets.sTankSpecial);
             foreach (Client _client in Server.rooms[_roomId].GetClient())
             {
-                _client.tcp.SendData(packet);
+                if (_client.udp != null)
+                {
+                    _client.udp.SendData(packet);
+                }
             }
         }
 
@@ -121,7 +151,10 @@ namespace TankServer
             packet.OverwriteHeader(0x01, (byte)ServerPackets.sTankHealth);
             foreach (Client _client in Server.rooms[_roomId].GetClient())
             {
-                _client.tcp.SendData(packet);
+                if (_client.tcp != null)
+                {
+                    _client.tcp.SendData(packet);
+                }
             }
         }
 
@@ -131,7 +164,10 @@ namespace TankServer
             packet.OverwriteHeader(0x01, (byte)ServerPackets.sTankDeath);
             foreach (Client _client in Server.rooms[_roomId].GetClient())
             {
-                _client.tcp.SendData(packet);
+                if (_client.tcp != null)
+                {
+                    _client.tcp.SendData(packet);
+                }
             }
         }
 
@@ -141,7 +177,10 @@ namespace TankServer
             packet.OverwriteHeader(0x01, (byte)ServerPackets.sWinRound);
             foreach (Client _client in Server.rooms[_roomId].GetClient())
             {
-                _client.tcp.SendData(packet);
+                if (_client.tcp != null)
+                {
+                    _client.tcp.SendData(packet);
+                }
             }
         }
 
@@ -151,7 +190,10 @@ namespace TankServer
             packet.OverwriteHeader(0x01, (byte)ServerPackets.sWinGame);
             foreach (Client _client in Server.rooms[_roomId].GetClient())
             {
-                _client.tcp.SendData(packet);
+                if (_client.tcp != null)
+                {
+                    _client.tcp.SendData(packet);
+                }
             }
         }
 
@@ -165,7 +207,10 @@ namespace TankServer
             {
                 if (_client.id != _clientid)
                 {
-                    _client.tcp.SendData(packet);
+                    if (_client.tcp != null)
+                    {
+                        _client.tcp.SendData(packet);
+                    }
                 }
             }
         }
@@ -176,7 +221,10 @@ namespace TankServer
             packet.OverwriteHeader(0x01, (byte)ServerPackets.sLeaveRoom);
             foreach (Client _client in Server.rooms[_roomId].GetClient())
             {
-                _client.tcp.SendData(packet);
+                if (_client.tcp != null)
+                {
+                    _client.tcp.SendData(packet);
+                }
             }
         }
 

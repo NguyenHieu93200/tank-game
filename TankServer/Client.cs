@@ -168,6 +168,7 @@ namespace TankServer
             {
                 Console.WriteLine($"{tcp.socket.Client.RemoteEndPoint} has disconnected.");
                 tcp.Disconnect();
+                udp.Disconnect();
             }
             
             username = null;
