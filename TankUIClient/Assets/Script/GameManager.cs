@@ -165,6 +165,10 @@ public class GameManager : MonoBehaviour
     }
     public void CheckWinGame()
     {
+        if (isEnd == 1)
+        {
+            return;
+        }
         if(team1Score == 3 || Client.instance.count2 == 0)
         {
             isEnd = 1;

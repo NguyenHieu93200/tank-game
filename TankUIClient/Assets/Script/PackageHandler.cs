@@ -380,6 +380,18 @@ public class PacketHandler
             if(Client.instance.id == Client.instance.hostId) {
                 if (GameManager.instance.CheckTeamWinRound(out int winner))
                 {
+                    if (winner == 1 && GameManager.instance.team2Score == 2)
+                    {
+                        GameManager.instance.team2Score++;
+                        GameManager.instance.CheckWinGame();
+                        return;
+                    }
+                    if (winner == 0 && GameManager.instance.team1Score == 2)
+                    {
+                        GameManager.instance.team1Score++;
+                        GameManager.instance.CheckWinGame();
+                        return;
+                    }
                     if (GameManager.instance.isEnd != 1 && GameManager.instance.isRoundEnd == false) {
                         PacketSender.WinRoundSender(Client.instance.roomId, (byte)(winner));
                         GameManager.instance.isRoundEnd = true;
@@ -431,9 +443,7 @@ public class PacketHandler
             {
                 GameManager.instance.team1Score++;
             }
-
         }
-
         GameManager.instance.WinGame(_team);
     }
     //sDisconnect
