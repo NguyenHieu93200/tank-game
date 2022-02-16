@@ -43,11 +43,11 @@ namespace TankServer
                     break;
                 //cTankShoot
                 case (byte)ClientPackets.cTankShoot:
-                    TankShootHandler(packet);
+                    TankShootHandler(_clientId, packet);
                     break;
                 //cTankSpecial
                 case (byte)ClientPackets.cTankSpecial:
-                    TankSpecialHandler(packet);
+                    TankSpecialHandler(_clientId, packet);
                     break;
                 //cTankHealth
                 case (byte)ClientPackets.cTankHealth:
@@ -172,8 +172,10 @@ namespace TankServer
         }
 
         //cTankShoot
-        private static void TankShootHandler(Packet packet)
+        private static void TankShootHandler(int _clientId, Packet packet)
         {
+            Console.Write($"Receive from {_clientId}: ");
+            Console.WriteLine(packet.ToHexString());
             int _client = packet.ReadInt();
             int _roomId = packet.ReadInt();
             ServerSender.TankShootSender(packet, _roomId);
@@ -181,8 +183,10 @@ namespace TankServer
         }
 
         //cTankSpecial
-        private static void TankSpecialHandler(Packet packet)
+        private static void TankSpecialHandler(int _clientId, Packet packet)
         {
+            Console.Write($"Receive from {_clientId}: ");
+            Console.WriteLine(packet.ToHexString());
             int _client = packet.ReadInt();
             int _roomId = packet.ReadInt();
             ServerSender.TankSpecialSender(packet, _roomId);
@@ -204,7 +208,7 @@ namespace TankServer
             int _client = packet.ReadInt();
             int _roomId = packet.ReadInt();
             ServerSender.TankDeathSender(packet, _roomId);
-            Console.WriteLine($"Client {_client} has been slain moved in room {_roomId}.");
+            Console.WriteLine($"Client {_client} has been slain in room {_roomId}.");
         }
 
         //cWinRound

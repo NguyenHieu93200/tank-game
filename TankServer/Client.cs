@@ -81,9 +81,8 @@ namespace TankServer
                     }
 
                 }
-                catch (Exception _ex)
+                catch (Exception)
                 {
-                    Console.WriteLine(_ex.Message);
                     Server.clients[id].Disconnect();
                 }
             }
@@ -101,10 +100,10 @@ namespace TankServer
                         Console.WriteLine(_packet.ToHexString());
                     }
                 }
-                catch (Exception _ex)
+                catch (Exception)
                 {
                     Server.clients[id].Disconnect();
-                    Console.WriteLine($"Error sending data to server via TCP: {_ex.Message}");
+                    Console.WriteLine($"Error sending data to server via TCP.");
                 }
             }
 

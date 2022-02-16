@@ -97,9 +97,9 @@ namespace TankServer
                     clients[_clientId].udp.HandleData(_packet);
                 }
             }
-            catch (Exception _ex)
+            catch (Exception)
             {
-                Console.WriteLine($"Error receiving UDP data: {_ex}");
+                Console.WriteLine($"Error receiving UDP data.");
             }
         }
 
@@ -112,9 +112,9 @@ namespace TankServer
                     udpListener.BeginSend(_packet.ToArray(), _packet.ToArray().Length, _clientEndPoint, null, null);
                 }
             }
-            catch (Exception _ex)
+            catch (Exception)
             {
-                Console.WriteLine($"Error sending data to {_clientEndPoint} via UDP: {_ex}");
+                Console.WriteLine($"Error sending data to {_clientEndPoint} via UDP.");
             }
         }
 
