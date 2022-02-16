@@ -7,7 +7,7 @@ public class Health : MonoBehaviour
 {
     public Slider playerSlider2D;
     private PlayerManager m_playerManager;
-
+    public Text CurrentHealth;
     // Start is called before the first frame update
     private void Awake()
     {
@@ -17,6 +17,7 @@ public class Health : MonoBehaviour
     {
             playerSlider2D.maxValue = m_playerManager.MAX_HEALTH;
             playerSlider2D.value = playerSlider2D.maxValue;
+            CurrentHealth.text = playerSlider2D.value + "/" + playerSlider2D.maxValue;
     }
 
     // Update is called once per frame
@@ -29,6 +30,7 @@ public class Health : MonoBehaviour
         if (m_playerManager)
         {
             playerSlider2D.value = m_playerManager.HEALTH;
+            CurrentHealth.text = playerSlider2D.value + "/" + playerSlider2D.maxValue;
         }
     }
 
