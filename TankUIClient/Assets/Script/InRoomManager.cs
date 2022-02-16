@@ -37,6 +37,7 @@ public class InRoomManager : MonoBehaviour
 
     public void ListingPlayer(List<PlayerInfo> players)
     {
+        RoomName.text = Client.instance.roomName;
         if (_panel1 != null)
         {
             foreach (Transform child in _panel1)
